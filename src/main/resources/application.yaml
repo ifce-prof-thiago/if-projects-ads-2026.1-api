@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: if-project
+  datasource:
+    url: jdbc:postgresql://localhost:5432/if-project
+    username: postgres
+    password: postgres
