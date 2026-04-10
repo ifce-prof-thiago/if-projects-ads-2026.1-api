@@ -1,6 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.users.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.ICreateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUserPassword;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -27,5 +29,45 @@ public class UserRepository implements IUserRepository {
                 .update();
 
         return 0L;
+    }
+
+    @Override
+    public Long persist(Long id, IUpdateUser.UpdateUserInput input) {
+        final var SQL = """
+                UPDATE users SET username = ?, email = ? WHERE id = ?
+                """;
+
+        db.sql(SQL)
+                .param(input.username())
+                .param(input.email())
+                .param(id)
+                .update();
+        return id;
+    }
+
+    @Override
+    public Long persist(Long id, IUpdateUserPassword.UpdateUserPasswordInput input) {
+        final var SQL = """
+                UPDATE users SET password_hash = md5(?) WHERE id = ? AND password_hash = md5(?)
+                """;
+
+        db.sql(SQL)
+                .param(input.newPassword())
+                .param(id)
+                .param(input.oldPassword())
+                .update();
+
+        return id;
+    }
+
+    @Override
+    public Long active(Long id) {
+        final var SQL = """
+                UPDATE users SET is_active = true WHERE id = ?
+                """;
+        db.sql(SQL)
+                .param(id)
+                .update();
+        return id;
     }
 }
