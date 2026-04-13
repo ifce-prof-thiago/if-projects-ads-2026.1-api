@@ -1,4 +1,4 @@
-package br.edu.ifce.mn.ads.ifproject.users.domain.usecases;
+package br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password;
 
 import br.edu.ifce.mn.ads.ifproject.users.infra.repositories.IUserRepository;
 import org.springframework.stereotype.Component;
