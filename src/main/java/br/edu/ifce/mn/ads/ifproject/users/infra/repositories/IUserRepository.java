@@ -1,8 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.users.infra.repositories;
 
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.ICreateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUserPassword;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
 
 public interface IUserRepository {
     Long persist(ICreateUser.CreateUserInput input);

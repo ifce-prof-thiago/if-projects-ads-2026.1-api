@@ -1,9 +1,10 @@
 package br.edu.ifce.mn.ads.ifproject.users.application.controllers;
 
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IActivateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.ICreateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUserPassword;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate.IActivateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

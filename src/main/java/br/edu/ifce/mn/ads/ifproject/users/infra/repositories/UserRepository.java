@@ -1,8 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.users.infra.repositories;
 
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.ICreateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUser;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.IUpdateUserPassword;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdateUser;
+import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +20,17 @@ public class UserRepository implements IUserRepository {
         final var SQL = """
                     INSERT INTO users(username, email, password_hash) VALUES
                     (?, ?, md5(?))
+                    RETURNING id
                 """;
 
-        db.sql(SQL)
+        final var id = db.sql(SQL)
                 .param(input.username())
                 .param(input.email())
                 .param(input.password())
-                .update();
+                .query(Long.class)
+                .single();
 
-        return 0L;
+        return id;
     }
 
     @Override
