@@ -16,9 +16,9 @@ public class TaskGroupController {
         this.archiveTask = archiveTask;
     }
 
-    @PatchMapping("{task_id}/archive")
+    @PatchMapping("{task_group_id}/archive")
     public IArchiveTask.ArchiveTaskOutput patch(
-            @PathVariable("task_id") Long id
+            @PathVariable("task_group_id") Long id
     ){
         return archiveTask.execute(id);
     }
