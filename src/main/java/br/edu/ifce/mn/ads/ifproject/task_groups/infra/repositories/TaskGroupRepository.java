@@ -52,4 +52,15 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
         return id;
     }
 
+    @Override
+    public Long delete(Long id) {
+        final var SQL = """
+                DELETE FROM task_groups WHERE id = ?
+                """;
+        db.sql(SQL)
+                .param(id)
+                .update();
+        return id;
+    }
+
 }
