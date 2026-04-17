@@ -1,6 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.create.ICreateColumn;
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.update.IRenameColumn;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,18 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
                 .param(input.position())
                 .query(Long.class)
                 .single();
+        return id;
+    }
+
+    @Override
+    public Long persist(Long id, IRenameColumn.RenameColumnInput input) {
+        final var SQL = """
+                UPDATE task_groups SET name = ? WHERE id = ?
+                """;
+        db.sql(SQL)
+                .param(input.name())
+                .param(id)
+                .update();
         return id;
     }
 
