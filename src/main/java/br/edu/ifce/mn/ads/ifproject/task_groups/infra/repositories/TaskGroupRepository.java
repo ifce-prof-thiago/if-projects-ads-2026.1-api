@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories;
 
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.create.ICreateColumn;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -22,4 +23,20 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
                 .update();
         return id;
     }
+
+    @Override
+    public Long persist(ICreateColumn.CreateColumnInput input) {
+        final var SQL = """
+                INSERT INTO task_groups(name, position) VALUES
+                (?, ?)
+                RETURNING id
+                """;
+        final var id = db.sql(SQL)
+                .param(input.name())
+                .param(input.position())
+                .query(Long.class)
+                .single();
+        return id;
+    }
+
 }
