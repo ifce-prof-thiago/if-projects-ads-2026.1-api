@@ -9,6 +9,7 @@ public class ActivateUser implements IActivateUser {
     private final IUserRepository repository;
 
     public ActivateUser(IUserRepository repository) {
+
         this.repository = repository;
     }
 

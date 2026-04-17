@@ -7,4 +7,5 @@ public interface ITaskGroupRepository {
     Long persist(Long id);
     Long persist(ICreateColumn.CreateColumnInput input);
     Long persist(Long id, IRenameColumn.RenameColumnInput input );
+    Long delete(Long id);
 }
