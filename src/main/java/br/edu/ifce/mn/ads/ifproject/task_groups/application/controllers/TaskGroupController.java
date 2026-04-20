@@ -3,6 +3,7 @@ package br.edu.ifce.mn.ads.ifproject.task_groups.application.controllers;
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.archive.IArchiveTask;
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.create.ICreateColumn;
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.delete.IDeleteColumn;
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.move.IMoveColumn;
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.update.IRenameColumn;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +15,14 @@ public class TaskGroupController {
     private final ICreateColumn createColumn;
     private final IRenameColumn renameColumn;
     private final IDeleteColumn deleteColumn;
+    private final IMoveColumn moveColumn;
 
-    public TaskGroupController(IArchiveTask archiveTask, ICreateColumn createColumn, IRenameColumn renameColumn, IDeleteColumn deleteColumn) {
+    public TaskGroupController(IArchiveTask archiveTask, ICreateColumn createColumn, IRenameColumn renameColumn, IDeleteColumn deleteColumn, IMoveColumn moveColumn) {
         this.archiveTask = archiveTask;
         this.createColumn = createColumn;
         this.renameColumn = renameColumn;
         this.deleteColumn = deleteColumn;
+        this.moveColumn = moveColumn;
     }
 
     @PatchMapping("{task_group_id}/archive")
@@ -47,5 +50,13 @@ public class TaskGroupController {
             @PathVariable("task_group_id") Long id
     ){
         return deleteColumn.execute(id);
+    }
+
+    @PatchMapping("{task_group_id}/move")
+    public IMoveColumn.MoveColumnOutput move(
+            @PathVariable("task_group_id") Long id,
+            @RequestBody IMoveColumn.MoveColumnInput input
+    ){
+        return moveColumn.execute(id, input);
     }
 }
