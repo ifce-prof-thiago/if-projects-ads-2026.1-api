@@ -28,16 +28,16 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     @Override
     public Long persist(ICreateColumn.CreateColumnInput input) {
         final var SQL = """
-                INSERT INTO task_groups(name, position) VALUES
-                (?, ?)
-                RETURNING id
-                """;
-        final var id = db.sql(SQL)
+            INSERT INTO task_groups(name, position, board_id) VALUES
+            (?, ?, ?)
+            RETURNING id
+            """;
+        return db.sql(SQL)
                 .param(input.name())
                 .param(input.position())
+                .param(input.boardId())
                 .query(Long.class)
                 .single();
-        return id;
     }
 
     @Override

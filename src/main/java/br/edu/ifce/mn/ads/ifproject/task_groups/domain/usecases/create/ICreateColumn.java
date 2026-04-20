@@ -5,7 +5,8 @@ public interface ICreateColumn {
 
     record CreateColumnInput(
             String name,
-            Long position
+            Long position,
+            Long boardId
     ){
 
     }
