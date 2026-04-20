@@ -63,4 +63,60 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
         return id;
     }
 
+    @Override
+    public Long findPositionById(Long id) {
+        final var SQL = """
+                SELECT position FROM task_groups WHERE id = ?
+                """;
+
+        return db.sql(SQL)
+                .param(id)
+                .query(Long.class)
+                .single();
+    }
+
+    @Override
+    public void updatePosition(Long id, Long newPosition) {
+        final var SQL = """
+                UPDATE task_groups SET position = ? WHERE id = ?
+                """;
+
+        db.sql(SQL)
+                .param(newPosition)
+                .param(id)
+                .update();
+    }
+
+    @Override
+    public void incrementPositions(Long boardId, Long newPosition, Long oldPosition) {
+        final var SQL = """
+                UPDATE task_groups
+                SET position = position + 1
+                WHERE board_id = ?
+                AND position >= ?
+                AND position < ?
+                """;
+        db.sql(SQL)
+                .param(boardId)
+                .param(newPosition)
+                .param(oldPosition)
+                .update();
+    }
+
+    @Override
+    public void decrementPositions(Long boardId, Long newPosition, Long oldPosition) {
+        final var SQL = """
+                UPDATE task_groups
+                SET position = position - 1
+                WHERE board_id = ?
+                AND position <= ?
+                AND position > ?
+                """;
+        db.sql(SQL)
+                .param(boardId)
+                .param(newPosition)
+                .param(oldPosition)
+                .update();
+    }
+
 }
