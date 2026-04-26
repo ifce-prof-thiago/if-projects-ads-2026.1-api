@@ -18,6 +18,6 @@ public interface ICreateProject {
     ){}
 
     record createProjectOutput(
-            java.util.UUID id
+            UUID id
     ){}
 }
