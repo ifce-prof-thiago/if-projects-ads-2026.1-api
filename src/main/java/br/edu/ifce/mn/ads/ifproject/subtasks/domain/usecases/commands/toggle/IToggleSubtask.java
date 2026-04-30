@@ -6,7 +6,7 @@ public interface IToggleSubtask {
     ToggleSubtaskOutput execute(UUID id);
 
     record ToggleSubtaskOutput(
-            UUID id,
+            String id,
             boolean isCompleted
     ) {
     }

@@ -15,7 +15,6 @@ public class ToggleSubtask implements IToggleSubtask {
 
     @Override
     public ToggleSubtaskOutput execute(UUID id) {
-        final var result = repository.toggle(id);
-        return new ToggleSubtaskOutput(result.id(), result.isCompleted());
+        return  repository.toggle(id);
     }
 }
