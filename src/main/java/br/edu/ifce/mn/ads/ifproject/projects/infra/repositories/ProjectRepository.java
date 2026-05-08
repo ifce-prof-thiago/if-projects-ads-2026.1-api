@@ -1,35 +1,38 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
-import org.springframework.jdbc.core.simple.JdbcClient;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ListArchivedProjectsSQL;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class ProjectRepository implements IProjectRepository {
 
-    private final JdbcClient jdbcClient;
+    private final ListArchivedProjectsSQL listArchivedProjectsSQL;
 
-    public ProjectRepository(JdbcClient jdbcClient) {
-        this.jdbcClient = jdbcClient;
+    public ProjectRepository(ListArchivedProjectsSQL listArchivedProjectsSQL) {
+        this.listArchivedProjectsSQL = listArchivedProjectsSQL;
+    }
+
+
+    @Override
+    public List<IListArchivedProjects.IListArchivedProjectsOutput> findArchivedByUser(
+            IListArchivedProjects.ListArchivedProjectsInput input
+    ) {
+        return listArchivedProjectsSQL.execute(input);
     }
 
     @Override
-    public IListArchivedProjects.ListArchivedProjectsOutput findArchivedByUser(
-            IListArchivedProjects.ListArchivedProjectsInput input
-    ) {
-        final var SQL = """
-                SELECT p.id, p.name, p.archived_at as archivedAt
-                FROM projects p
-                JOIN project_members pm ON p.id = pm.project_id
-                WHERE pm.user_id = ?
-                AND p.archived_at IS NOT NULL
-                """;
+    public UUID update(UUID projectId, IUpdateProject.UpdateProjectInput input) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 
-        var list = jdbcClient.sql(SQL)
-                .param(input.userId())
-                .query(IListArchivedProjects.ProjectList.class)
-                .list();
-
-        return new IListArchivedProjects.ListArchivedProjectsOutput(list);
+    @Override
+    public UUID persist(ICreateProject.createProjectInput input) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }

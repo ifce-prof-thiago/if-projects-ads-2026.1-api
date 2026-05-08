@@ -3,6 +3,8 @@ package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_arch
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Component
 public class ListArchivedProjects implements IListArchivedProjects {
@@ -14,7 +16,7 @@ public class ListArchivedProjects implements IListArchivedProjects {
     }
 
     @Override
-    public ListArchivedProjectsOutput execute(ListArchivedProjectsInput input) {
+    public List<IListArchivedProjectsOutput> execute(ListArchivedProjectsInput input) {
         return projectRepository.findArchivedByUser(input);
     }
 }
