@@ -19,7 +19,7 @@ public interface ICreateUser {
     }
 
     record CreateUserOutput(
-            java.util.UUID id
+            Long id
     ) {
     }
 

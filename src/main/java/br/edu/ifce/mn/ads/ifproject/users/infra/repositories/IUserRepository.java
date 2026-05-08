@@ -4,10 +4,8 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreat
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdateUser;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
 
-import java.util.UUID;
-
 public interface IUserRepository {
-    UUID persist(ICreateUser.CreateUserInput input);
+    Long persist(ICreateUser.CreateUserInput input);
 
     Long persist(Long id, IUpdateUser.UpdateUserInput input);
 

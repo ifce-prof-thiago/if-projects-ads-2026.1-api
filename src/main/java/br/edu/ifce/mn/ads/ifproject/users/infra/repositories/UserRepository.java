@@ -6,8 +6,6 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_passwo
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 public class UserRepository implements IUserRepository {
 
@@ -18,20 +16,21 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public UUID persist(ICreateUser.CreateUserInput input) {
+    public Long persist(ICreateUser.CreateUserInput input) {
         final var SQL = """
                     INSERT INTO users(username, email, password_hash) VALUES
                     (?, ?, md5(?))
                     RETURNING id
                 """;
 
-        return db.sql(SQL)
+        final var id = db.sql(SQL)
                 .param(input.username())
                 .param(input.email())
                 .param(input.password())
-                .query(UUID.class)
+                .query(Long.class)
                 .single();
 
+        return id;
     }
 
     @Override
