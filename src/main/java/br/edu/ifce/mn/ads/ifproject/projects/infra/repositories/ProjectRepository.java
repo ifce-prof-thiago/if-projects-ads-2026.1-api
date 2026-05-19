@@ -1,6 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
@@ -40,5 +41,25 @@ public class ProjectRepository implements IProjectRepository {
                 .update();
 
         return id;
+    }
+
+    @Override
+    public IListArchivedProjects.ListArchivedProjectsOutput findArchivedByUser(
+            IListArchivedProjects.ListArchivedProjectsInput input
+    ) {
+        final var SQL = """
+                SELECT p.id, p.name, p.archived_at as archivedAt
+                FROM projects p
+                JOIN project_members pm ON p.id = pm.project_id
+                WHERE pm.user_id = ?
+                AND p.archived_at IS NOT NULL
+                """;
+
+        var list = db.sql(SQL)
+                .param(input.userId())
+                .query(IListArchivedProjects.ProjectList.class)
+                .list();
+
+        return new IListArchivedProjects.ListArchivedProjectsOutput(list);
     }
 }
