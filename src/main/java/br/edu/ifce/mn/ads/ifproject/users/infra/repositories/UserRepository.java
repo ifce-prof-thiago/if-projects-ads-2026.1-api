@@ -72,4 +72,6 @@ public class UserRepository implements IUserRepository {
                 .update();
         return id;
     }
+
+    //criar uma query para buscar um usuário
 }
