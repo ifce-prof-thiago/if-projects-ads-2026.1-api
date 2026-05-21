@@ -1,6 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read.IReadBoard;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -25,5 +26,19 @@ public class BoardRepository implements IBoardRepository{
                 .single();
 
         return id;
+    }
+
+    public IReadBoard.ReadBoardOutput find(IReadBoard.ReadBoardInput input){
+        final var SQL = "SELECT name, project_id, color_hex, is_archived FROM boards WHERE id = (?)";
+
+        return db.sql(SQL)
+                .param(input.id())
+                .query((rs, rowNum) -> new IReadBoard.ReadBoardOutput(
+                        rs.getString("name"),
+                        rs.getObject("project_id", UUID.class),
+                        rs.getString("color_hex"),
+                        rs.getBoolean("is_archived")
+                ))
+                .single();
     }
 }
