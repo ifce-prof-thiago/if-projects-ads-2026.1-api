@@ -11,6 +11,7 @@ public interface ICreateProject {
 
     ICreateProject.createProjectOutput execute(@Valid ICreateProject.createProjectInput input);
 
+    record CreateProjectRequest(@ProjectName String name) {}
 
     record createProjectInput(
             @ProjectName String name,

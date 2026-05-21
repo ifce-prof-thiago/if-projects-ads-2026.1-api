@@ -22,20 +22,22 @@ public class ProjectController {
         this.listArchivedProjects = listArchivedProjects;
     }
 
+    //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
     @PostMapping
-    public ICreateProject.createProjectOutput post(@RequestBody String name) {
+    public ICreateProject.createProjectOutput post(@RequestHeader("X-User-Id") UUID currentUserId,
+            @RequestBody ICreateProject.CreateProjectRequest body) {
 
-        UUID currentUserId = UUID.fromString("019dc0e4-df2b-7e14-9354-91df1104846e");
-        var input = new ICreateProject.createProjectInput(name, currentUserId);
+        var input = new ICreateProject.createProjectInput(body.name(), currentUserId);
         return createProject.execute(input);
     }
 
+    //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
     @PutMapping("/{id}")
     public IUpdateProject.UpdateProjectOutput update(
-            @PathVariable UUID id,
+            @PathVariable UUID id, @RequestHeader("X-User-Id") UUID requesterId,
             @RequestBody IUpdateProject.UpdateProjectInput input) {
-        UUID requesterID = UUID.fromString("019dc0e4-df2b-7e14-9354-91df1104846e");
-        return updateProject.execute(id, requesterID, input);
+
+        return updateProject.execute(id, requesterId, input);
     }
 
     @GetMapping("/archived")
