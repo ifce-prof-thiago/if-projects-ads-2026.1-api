@@ -23,7 +23,7 @@ public class ProjectController {
     public List<IListArchivedProjects.IListArchivedProjectsOutput> get(
             @RequestParam UUID userId,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "1") Integer perPage
+            @RequestParam(defaultValue = "10") Integer perPage
     ) {
         var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, page, perPage);
         return listArchivedProjects.execute(input);
