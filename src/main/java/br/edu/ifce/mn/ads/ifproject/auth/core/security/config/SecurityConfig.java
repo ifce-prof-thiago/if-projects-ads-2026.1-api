@@ -10,6 +10,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.edu.ifce.mn.ads.ifproject.auth.core.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +29,9 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
+
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
             .build();
     }
     
@@ -37,4 +44,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+    
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 }

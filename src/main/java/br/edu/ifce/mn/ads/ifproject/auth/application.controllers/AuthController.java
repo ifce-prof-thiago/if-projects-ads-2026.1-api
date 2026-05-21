@@ -2,16 +2,16 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifce.mn.ads.ifproject.auth.core.security.JwtService;
 import br.edu.ifce.mn.ads.ifproject.users.domain.models.RegisterDTO;
+import br.edu.ifce.mn.ads.ifproject.auth.application.controllers.dtos.LoginDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import br.edu.ifce.mn.ads.ifproject.auth.application.controllers.dtos.LoginDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import br.edu.ifce.mn.ads.ifproject.auth.core.security.JwtService;
 
 
 @RestController
@@ -27,7 +27,8 @@ public class AuthController {
     public ResponseEntity login(@RequestBody @Valid LoginDTO data) { 
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(
-            data.email(), data.password()
+            data.email(),
+            data.password()
             );
 
         var auth = authenticationManager.authenticate(usernamePassword);    
