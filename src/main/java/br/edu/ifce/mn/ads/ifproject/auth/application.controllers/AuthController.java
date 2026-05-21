@@ -7,6 +7,8 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.models.RegisterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import br.edu.ifce.mn.ads.ifproject.auth.application.controllers.dtos.LoginDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,12 +19,14 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid String entity) {
-        //TODO: process POST request
+    public ResponseEntity login(@RequestBody @Valid LoginDTO data) { 
 
-        //utilizar o metodo authenticate do authenticationManager para validar o usuario
+        var usernamePassword = new UsernamePasswordAuthenticationToken(
+            data.email(), data.password()
+            );
+
+        var auth = authenticationManager.authenticate(usernamePassword);    
         
         return ResponseEntity.ok().build();
     }
