@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import br.edu.ifce.mn.ads.ifproject.auth.application.controllers.dtos.LoginDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import br.edu.ifce.mn.ads.ifproject.auth.core.security.JwtService;
 
 
 @RestController
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginDTO data) { 
@@ -28,7 +32,8 @@ public class AuthController {
 
         var auth = authenticationManager.authenticate(usernamePassword);    
         
-        return ResponseEntity.ok().build();
+            var token = jwtService.generateToken(data.email());
+            return ResponseEntity.ok(token);
     }
     
     @PostMapping("/register")
