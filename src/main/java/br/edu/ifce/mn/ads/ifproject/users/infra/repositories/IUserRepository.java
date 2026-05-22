@@ -12,4 +12,8 @@ public interface IUserRepository {
     Long persist(Long id, IUpdateUserPassword.UpdateUserPasswordInput input);
 
     Long active(Long id);
+
+    // verificações de duplicidade para o cadastro
+    boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
 }
