@@ -16,4 +16,7 @@ public interface IUserRepository {
     // verificações de duplicidade para o cadastro
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+
+    // aqui eu desativo a conta do usuario
+    Long deactive(Long id);
 }
