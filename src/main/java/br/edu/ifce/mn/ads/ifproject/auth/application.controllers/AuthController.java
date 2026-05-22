@@ -2,11 +2,14 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifce.mn.ads.ifproject.auth.core.security.JwtService;
 import br.edu.ifce.mn.ads.ifproject.users.domain.models.RegisterDTO;
+import br.edu.ifce.mn.ads.ifproject.auth.application.controllers.dtos.LoginDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,14 +20,21 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid String entity) {
-        //TODO: process POST request
+    public ResponseEntity login(@RequestBody @Valid LoginDTO data) { 
 
-        //utilizar o metodo authenticate do authenticationManager para validar o usuario
+        var usernamePassword = new UsernamePasswordAuthenticationToken(
+            data.email(),
+            data.password()
+            );
+
+        var auth = authenticationManager.authenticate(usernamePassword);    
         
-        return ResponseEntity.ok().build();
+            var token = jwtService.generateToken(data.email());
+            return ResponseEntity.ok(token);
     }
     
     @PostMapping("/register")
