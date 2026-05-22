@@ -102,5 +102,19 @@ public class UserRepository implements IUserRepository {
                 .query(Long.class)
                 .single();
         return count > 0;
+
+
     }
+    @Override
+        public String findPasswordByLogin(String login) {
+                final var SQL = """
+                        SELECT password_hash
+                        FROM users
+                        WHERE username = ?
+                        """;
+                return db.sql(SQL)
+                        .param(login)
+                        .query(String.class)
+                        .single();
+        }
 }

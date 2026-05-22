@@ -13,6 +13,8 @@ public interface IUserRepository {
 
     Long active(Long id);
 
+    String findPasswordByLogin(String login);
+
     // verificações de duplicidade para o cadastro
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);

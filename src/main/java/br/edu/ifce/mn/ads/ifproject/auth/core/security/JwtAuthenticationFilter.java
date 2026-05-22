@@ -1,16 +1,22 @@
 package br.edu.ifce.mn.ads.ifproject.auth.core.security;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.annotation.Autowrited;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-@component
+import br.edu.ifce.mn.ads.ifproject.auth.core.security.service.CustomUserDetailsService;
+
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowrited
+    @Autowired
     private JwtService jwtService;
 
-    @override
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+    @Override
     protected void doFilterInternal(
         jakarta.servlet.http.HttpServletRequest request,
         jakarta.servlet.http.HttpServletResponse response,
@@ -21,7 +27,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(token != null) {
             token = token.replace("Bearer ", "");
 
-            string email = jwtService.validateToken(token);
+            String email = jwtService.validateToken(token);
+
+            if(!email.isEmpty()) {
+                var userDetails = customUserDetailsService.loadUserByUsername(email);
+
+                var authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+                );
+
+                SecurityContextHolder
+                    .getContext()
+                    .setAuthentication(authentication);
+            }
+
 
             System.out.println("email");
         }
