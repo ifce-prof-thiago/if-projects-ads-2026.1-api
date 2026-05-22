@@ -20,7 +20,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Long persist(ICreateUser.CreateUserInput input) {
-        // senha criptografada com bcrypt antes de salvar no banco
+        // pega a senha e transforma em BCrypt antes de salvar, p nao ficar exposta no banco
         final var SQL = """
                     INSERT INTO users(username, email, password_hash) VALUES
                     (?, ?, ?)
@@ -39,7 +39,6 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Long persist(Long id, IUpdateUser.UpdateUserInput input) {
-        // verifica a senha atual e slv a nova senha criptografada com bcrypt
         final var SQL = """
                 UPDATE users SET username = ?, email = ? WHERE id = ?
                 """;
@@ -54,6 +53,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Long persist(Long id, IUpdateUserPassword.UpdateUserPasswordInput input) {
+        // verifica a senha antiga e ja salvo a nova criptografada com BCrypt
         final var SQL = """
                 UPDATE users SET password_hash = ? WHERE id = ? AND password_hash = ?
                 """;
@@ -76,5 +76,31 @@ public class UserRepository implements IUserRepository {
                 .param(id)
                 .update();
         return id;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        // verifica se ja tem alguem cadastrado com esse email antes de deixar criar a conta
+        final var SQL = """
+                SELECT COUNT(*) FROM users WHERE email = ?
+                """;
+        final var count = db.sql(SQL)
+                .param(email)
+                .query(Long.class)
+                .single();
+        return count > 0;
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        // verificoa se ja tem alguem usando esse username antes de deixar criar a conta
+        final var SQL = """
+                SELECT COUNT(*) FROM users WHERE username = ?
+                """;
+        final var count = db.sql(SQL)
+                .param(username)
+                .query(Long.class)
+                .single();
+        return count > 0;
     }
 }

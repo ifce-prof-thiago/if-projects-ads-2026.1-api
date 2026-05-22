@@ -15,6 +15,16 @@ public class CreateUser implements ICreateUser {
     @Override
     public CreateUserOutput execute(CreateUserInput input) {
 
+        // verifica se ja existe alguem com esse email antes de cadastrar
+        if (repository.existsByEmail(input.email())) {
+            throw new IllegalArgumentException("Esse e-mail ja esta sendo usado por outra conta");
+        }
+
+        // verifica se ja existe alguem com esse username antes de cadastrar
+        if (repository.existsByUsername(input.username())) {
+            throw new IllegalArgumentException("Esse username ja esta sendo usado por outra conta");
+        }
+
         final var id = repository.persist(input);
 
         return new CreateUserOutput(id);
