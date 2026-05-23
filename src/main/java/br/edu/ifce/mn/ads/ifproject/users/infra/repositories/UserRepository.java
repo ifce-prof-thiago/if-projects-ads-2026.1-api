@@ -53,15 +53,22 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public Long persist(Long id, IUpdateUserPassword.UpdateUserPasswordInput input) {
+        // aqui busca o hash da senha atual que está salvo no banco
+        String currentHash = findPasswordHash(id);
+
+        // aqui compara a senha antiga digitada com o hash, se errar, lança erro
+        // passwordEncoder.matches("senha digitada", "hash do banco") faz isso com segurança
+        if (currentHash == null || !passwordEncoder.matches(input.oldPassword(), currentHash)) {
+            throw new RuntimeException("Senha atual incorreta");
+        }
         // verifica a senha antiga e ja salvo a nova criptografada com BCrypt
         final var SQL = """
-                UPDATE users SET password_hash = ? WHERE id = ? AND password_hash = ?
+                UPDATE users SET password_hash = ? WHERE id = ?
                 """;
 
         db.sql(SQL)
                 .param(passwordEncoder.encode(input.newPassword()))
                 .param(id)
-                .param(passwordEncoder.encode(input.oldPassword()))
                 .update();
 
         return id;
@@ -105,6 +112,32 @@ public class UserRepository implements IUserRepository {
 
 
     }
+
+    // aqui desativa a conta do usuário
+    @Override
+    public Long deactive(Long id) {
+        final var SQL = """
+                UPDATE users SET is_active = false WHERE id = ?
+                """;
+        db.sql(SQL)
+                .param(id)
+                .update();
+        return id;
+    }
+
+    // aqui procura o hash da senha do usuário pelo id
+    @Override
+    public String findPasswordHash(Long id) {
+        final var SQL = """
+                SELECT password_hash FROM users WHERE id = ?
+                """;
+        return db.sql(SQL)
+                .param(id)
+                .query(String.class)
+                .optional()
+                .orElse(null);
+    }
+
     @Override
         public String findPasswordByLogin(String login) {
                 final var SQL = """

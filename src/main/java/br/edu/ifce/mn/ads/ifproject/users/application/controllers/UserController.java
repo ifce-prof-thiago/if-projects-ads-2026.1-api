@@ -7,6 +7,7 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdat
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("api/v1/users")

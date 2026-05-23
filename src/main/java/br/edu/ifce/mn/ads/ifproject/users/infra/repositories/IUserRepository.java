@@ -21,4 +21,6 @@ public interface IUserRepository {
 
     // aqui eu desativo a conta do usuario
     Long deactive(Long id);
-}
+
+    String findPasswordHash(Long id);
+};
