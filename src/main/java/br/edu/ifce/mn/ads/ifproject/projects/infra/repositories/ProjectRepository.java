@@ -3,63 +3,45 @@ package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.CreateProjectSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ListArchivedProjectsSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.UpdateProjectSQL;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
 public class ProjectRepository implements IProjectRepository {
 
-    private final JdbcClient db;
+    private final ListArchivedProjectsSQL listArchivedProjectsSQL;
+    private final CreateProjectSQL createProjectSQL;
+    private final UpdateProjectSQL updateProjectSQL;
 
-    public ProjectRepository(JdbcClient db) {
-        this.db = db;
+    public ProjectRepository(UpdateProjectSQL updateProjectSQL, CreateProjectSQL createProjectSQL, ListArchivedProjectsSQL listArchivedProjectsSQL) {
+        this.listArchivedProjectsSQL = listArchivedProjectsSQL;
+        this.createProjectSQL = createProjectSQL;
+        this.updateProjectSQL = updateProjectSQL;
     }
 
+    @Override
     public UUID persist(ICreateProject.createProjectInput input){
-        final var SQL = """
-                INSERT INTO projects(name, owner_id) VALUES (?, ?)
-                RETURNING id
-                """;
-
-        return db.sql(SQL)
-                .param(input.name())
-                .param(input.ownerId())
-                .query(UUID.class)
-                .single();
+        return createProjectSQL.execute(input);
     }
 
     @Override
     public UUID update(UUID id, IUpdateProject.UpdateProjectInput input) {
-        final var SQL = """
-                UPDATE projects SET name = ? WHERE ID = ?
-                """;
-        db.sql(SQL)
-                .param(input.name())
-                .param(id)
-                .update();
+        updateProjectSQL.execute(id, input);
 
         return id;
     }
 
     @Override
-    public IListArchivedProjects.ListArchivedProjectsOutput findArchivedByUser(
+    public List<IListArchivedProjects.IListArchivedProjectsOutput> findArchivedByUser(
             IListArchivedProjects.ListArchivedProjectsInput input
     ) {
-        final var SQL = """
-                SELECT p.id, p.name, p.archived_at as archivedAt
-                FROM projects p
-                JOIN project_members pm ON p.id = pm.project_id
-                WHERE pm.user_id = ?
-                AND p.archived_at IS NOT NULL
-                """;
-
-        var list = db.sql(SQL)
-                .param(input.userId())
-                .query(IListArchivedProjects.ProjectList.class)
-                .list();
-
-        return new IListArchivedProjects.ListArchivedProjectsOutput(list);
+        return listArchivedProjectsSQL.execute(input);
     }
+
 }

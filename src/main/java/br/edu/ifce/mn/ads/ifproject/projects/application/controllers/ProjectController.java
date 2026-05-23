@@ -5,6 +5,7 @@ import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archi
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,8 +16,9 @@ public class ProjectController {
     private final IUpdateProject updateProject;
     private final IListArchivedProjects listArchivedProjects;
 
-    public ProjectController(ICreateProject createProject, IUpdateProject updateProject,
-            IListArchivedProjects listArchivedProjects) {
+    public ProjectController(ICreateProject createProject,
+                             IUpdateProject updateProject,
+                             IListArchivedProjects listArchivedProjects) {
         this.createProject = createProject;
         this.updateProject = updateProject;
         this.listArchivedProjects = listArchivedProjects;
@@ -41,9 +43,11 @@ public class ProjectController {
     }
 
     @GetMapping("/archived")
-    public IListArchivedProjects.ListArchivedProjectsOutput get(@RequestParam UUID userId) {
+    public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId,
+                                                                       @RequestParam(defaultValue = "0") Integer page,
+                                                                       @RequestParam(defaultValue = "10") Integer perPage) {
 
-        var input = new IListArchivedProjects.ListArchivedProjectsInput(userId);
+        var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, page, perPage);
         return listArchivedProjects.execute(input);
     }
 }

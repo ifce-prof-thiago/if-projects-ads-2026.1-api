@@ -4,14 +4,16 @@ import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_pro
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface IProjectRepository {
 
     UUID persist(ICreateProject.createProjectInput input);
+
     UUID update(UUID id, IUpdateProject.UpdateProjectInput input);
 
-    IListArchivedProjects.ListArchivedProjectsOutput findArchivedByUser(
+    List<IListArchivedProjects.IListArchivedProjectsOutput> findArchivedByUser(
             IListArchivedProjects.ListArchivedProjectsInput input
     );
 }
