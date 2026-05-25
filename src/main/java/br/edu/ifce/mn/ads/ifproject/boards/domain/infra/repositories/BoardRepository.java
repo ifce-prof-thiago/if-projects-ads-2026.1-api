@@ -2,6 +2,7 @@ package br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read.IReadBoard;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.update.IUpdateBoard;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -41,4 +42,18 @@ public class BoardRepository implements IBoardRepository{
                 ))
                 .single();
     }
+
+    public UUID update(UUID id, IUpdateBoard.UpdateBoardInput input){
+
+        final var SQL = "UPDATE boards set name = COALESCE(?, name), color_hex = COALESCE(?, color_hex) where id = (?)";
+
+        db.sql(SQL)
+                .param(input.name())
+                .param(input.color())
+                .param(id)
+                .update();
+
+        return id;
+    }
+
 }
