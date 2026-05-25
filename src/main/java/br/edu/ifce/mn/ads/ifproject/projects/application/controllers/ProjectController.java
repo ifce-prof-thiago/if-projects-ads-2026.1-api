@@ -4,6 +4,8 @@ import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_pro
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,11 +45,9 @@ public class ProjectController {
     }
 
     @GetMapping("/archived")
-    public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId,
-                                                                       @RequestParam(defaultValue = "0") Integer page,
-                                                                       @RequestParam(defaultValue = "10") Integer perPage) {
+    public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId,Pageable pageable) {
 
-        var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, page, perPage);
-        return listArchivedProjects.execute(input);
+        var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, pageable);
+        return listArchivedProjects.execute(input, pageable);
     }
 }

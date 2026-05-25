@@ -3,6 +3,7 @@ package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,16 +26,14 @@ public class ListArchivedProjectsSQL {
     }
 
     public List<IListArchivedProjects.IListArchivedProjectsOutput> execute(
-            IListArchivedProjects.ListArchivedProjectsInput input
+            IListArchivedProjects.ListArchivedProjectsInput input, Pageable pageable
     ) {
-        int safePage = Math.max(input.page(), 0);
-        int safeSize = Math.max(input.perPage(), 1);
-        int offset = safePage * safeSize;
+
 
         return jdbcClient.sql(SQL)
                 .param(input.userId())
-                .param(safeSize)
-                .param(offset)
+                .param(pageable.getPageSize())
+                .param(pageable.getOffset())
                 .query(IListArchivedProjects.IListArchivedProjectsOutput.class)
                 .list();
     }

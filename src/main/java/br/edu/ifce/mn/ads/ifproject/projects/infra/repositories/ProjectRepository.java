@@ -6,8 +6,8 @@ import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_pro
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.CreateProjectSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ListArchivedProjectsSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.UpdateProjectSQL;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,9 +39,9 @@ public class ProjectRepository implements IProjectRepository {
 
     @Override
     public List<IListArchivedProjects.IListArchivedProjectsOutput> findArchivedByUser(
-            IListArchivedProjects.ListArchivedProjectsInput input
+            IListArchivedProjects.ListArchivedProjectsInput input, Pageable pageable
     ) {
-        return listArchivedProjectsSQL.execute(input);
+        return listArchivedProjectsSQL.execute(input, pageable);
     }
 
 }
