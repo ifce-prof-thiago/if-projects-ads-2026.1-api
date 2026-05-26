@@ -1,11 +1,13 @@
 package br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.findBoardsByProject.IFindBoardsByProject;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read.IReadBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.update.IUpdateBoard;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -56,4 +58,19 @@ public class BoardRepository implements IBoardRepository{
         return id;
     }
 
+    @Override
+    public List<IFindBoardsByProject.BoardItem> findByProjectId(UUID projectId) {
+
+        final var SQL = "SELECT id, name, color_hex, is_archived FROM boards WHERE project_id = (?) AND is_archived is false";
+
+        return db.sql(SQL)
+                .param(projectId)
+                .query((rs, rowNum) -> new IFindBoardsByProject.BoardItem(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("name"),
+                        rs.getString("color_hex"),
+                        rs.getBoolean("is_archived")
+                ))
+                .list();
+    }
 }
