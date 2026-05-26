@@ -5,7 +5,6 @@ import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.find_proje
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,8 @@ public class ProjectController {
 
     public ProjectController(ICreateProject createProject,
                              IUpdateProject updateProject,
-                             IListArchivedProjects listArchivedProjects, IFindProject findProject) {
+                             IListArchivedProjects listArchivedProjects,
+                             IFindProject findProject) {
         this.createProject = createProject;
         this.updateProject = updateProject;
         this.listArchivedProjects = listArchivedProjects;
@@ -47,6 +47,7 @@ public class ProjectController {
         return updateProject.execute(id, requesterId, input);
     }
 
+    //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
     @GetMapping("/{id}")
     public IFindProject.FindProjectOutput getById(
             @PathVariable UUID id,

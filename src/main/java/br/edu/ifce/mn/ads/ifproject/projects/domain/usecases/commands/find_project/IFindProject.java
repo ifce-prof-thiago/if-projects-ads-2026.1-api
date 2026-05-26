@@ -1,6 +1,5 @@
 package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.find_project;
 
-import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
