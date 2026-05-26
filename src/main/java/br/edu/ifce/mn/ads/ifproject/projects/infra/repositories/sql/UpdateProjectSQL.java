@@ -10,7 +10,7 @@ import java.util.UUID;
 public class UpdateProjectSQL {
 
     private final static String SQL = """
-                UPDATE projects SET name = ? WHERE ID = ?
+                UPDATE projects SET name = ? WHERE id = ?
                 """;
 
     private final JdbcClient jdbcClient;
@@ -19,13 +19,12 @@ public class UpdateProjectSQL {
         this.jdbcClient = jdbcClient;
     }
 
-    public UUID execute(UUID id, IUpdateProject.UpdateProjectInput input) {
+    public void execute(UUID id, IUpdateProject.UpdateProjectInput input) {
 
         jdbcClient.sql(SQL)
                 .param(input.name())
                 .param(id)
                 .update();
 
-        return id;
     }
 }

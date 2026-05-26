@@ -25,7 +25,7 @@ public class CreateProjectSQL {
 
         return jdbcClient.sql(SQL)
                 .param(input.name())
-                .param(input.ownerId())
+                .param(input.requesterId())
                 .query(UUID.class)
                 .single();
     }

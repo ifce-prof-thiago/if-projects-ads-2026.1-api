@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Size(min = 2, max = 32)
+@Size(min = 3, max = 100)
 @Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})

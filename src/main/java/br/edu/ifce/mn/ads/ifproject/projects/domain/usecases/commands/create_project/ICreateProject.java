@@ -14,8 +14,8 @@ public interface ICreateProject {
     record CreateProjectRequest(@ProjectName String name) {}
 
     record createProjectInput(
-            @ProjectName String name,
-            UUID ownerId
+            UUID requesterId,
+            @ProjectName String name
     ){}
 
     record createProjectOutput(
