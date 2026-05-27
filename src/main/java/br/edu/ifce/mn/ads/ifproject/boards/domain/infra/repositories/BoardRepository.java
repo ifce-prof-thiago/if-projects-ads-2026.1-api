@@ -73,4 +73,33 @@ public class BoardRepository implements IBoardRepository{
                 ))
                 .list();
     }
+
+    @Override
+    public boolean isUserAuthorizedToDelete(UUID boardId, UUID userId) {
+        final var SQL = """
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM boards b
+                    JOIN projects p ON b.project_id = p.id
+                    LEFT JOIN project_members pm ON pm.project_id = p.id AND pm.user_id = ?
+                    WHERE b.id = ? AND (p.owner_id = ? OR pm.role = 'ADMIN')
+                )
+                """;
+
+        return db.sql(SQL)
+                .param(userId)
+                .param(boardId)
+                .param(userId)
+                .query(Boolean.class)
+                .single();
+    }
+
+    @Override
+    public void delete(UUID boardId) {
+        final var SQL = "DELETE FROM boards WHERE id = (?)";
+
+        db.sql(SQL)
+                .param(boardId)
+                .update();
+    }
 }

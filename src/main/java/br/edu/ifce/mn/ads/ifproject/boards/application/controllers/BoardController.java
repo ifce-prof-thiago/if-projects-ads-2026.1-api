@@ -1,9 +1,11 @@
 package br.edu.ifce.mn.ads.ifproject.boards.application.controllers;
 
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.delete.IDeleteBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.findBoardsByProject.IFindBoardsByProject;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read.IReadBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.update.IUpdateBoard;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,17 +18,20 @@ public class BoardController {
     private final IReadBoard readBoard;
     private final IUpdateBoard updateBoard;
     private final IFindBoardsByProject findByProject;
+    private final IDeleteBoard deleteBoard;
 
     public BoardController(
             ICreateBoard createBoard,
             IReadBoard readBoard,
             IUpdateBoard updateBoard,
-            IFindBoardsByProject findByProject
+            IFindBoardsByProject findByProject,
+            IDeleteBoard deleteBoard
     ) {
         this.createBoard = createBoard;
         this.readBoard = readBoard;
         this.updateBoard = updateBoard;
         this.findByProject = findByProject;
+        this.deleteBoard = deleteBoard;
     }
 
     @PostMapping
@@ -47,5 +52,14 @@ public class BoardController {
     @GetMapping(value = "/project/{projectId}")
     public IFindBoardsByProject.FindBoardsByProjectOutput getByProjectId(@PathVariable UUID projectId){
         return findByProject.execute(new IFindBoardsByProject.FindBoardsByProjectInput(projectId));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable UUID id,
+            @RequestHeader("X-User-Id") UUID requesterId
+    ){
+        deleteBoard.execute(id, requesterId);
     }
 }
