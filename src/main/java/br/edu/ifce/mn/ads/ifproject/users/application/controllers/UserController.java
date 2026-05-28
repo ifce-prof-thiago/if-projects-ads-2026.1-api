@@ -4,7 +4,6 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate.IAct
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreateUser;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdateUser;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

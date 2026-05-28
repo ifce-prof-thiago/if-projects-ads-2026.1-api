@@ -1,7 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.enums.ProjectRole;
-import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProjectByIdAndUserId;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;

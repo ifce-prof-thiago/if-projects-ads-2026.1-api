@@ -5,7 +5,6 @@ import br.edu.ifce.mn.ads.ifproject.projects.domain.exceptions.ProjectNotFoundEx
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.UUID;
 
 

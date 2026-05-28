@@ -1,9 +1,9 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
-import br.edu.ifce.mn.ads.ifproject.projects.domain.enums.ProjectRole;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
