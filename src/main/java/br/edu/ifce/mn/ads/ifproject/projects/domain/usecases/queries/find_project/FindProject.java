@@ -1,4 +1,4 @@
-package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.find_project;
+package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.exceptions.ProjectNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;

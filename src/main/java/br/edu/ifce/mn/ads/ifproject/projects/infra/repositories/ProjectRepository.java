@@ -1,8 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
-import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.find_project.IFindProject;
-import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.CreateProjectSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.FindProjectSQL;
@@ -31,8 +31,8 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public UUID persist(ICreateProject.createProjectInput input){
-        return createProjectSQL.execute(input);
+    public UUID persist(UUID ownerId, ICreateProject.CreateProjectInput input){
+        return createProjectSQL.execute(ownerId, input);
     }
 
     @Override

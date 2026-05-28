@@ -1,4 +1,4 @@
-package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.find_project;
+package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project;
 
 
 import java.time.LocalDateTime;

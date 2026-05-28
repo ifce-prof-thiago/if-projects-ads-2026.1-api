@@ -10,7 +10,7 @@ import java.util.UUID;
 @Validated
 public interface IUpdateProject {
 
-    UpdateProjectOutput execute(UUID projectId, UUID requesterID, @Valid UpdateProjectInput input);
+    UpdateProjectOutput execute(UUID projectId, @Valid UpdateProjectInput input);
 
     record UpdateProjectInput (
             @ProjectName String name

@@ -1,11 +1,14 @@
 package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project;
 
+import br.edu.ifce.mn.ads.ifproject.commons.UserLogged;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Component
-public class CreateProject implements ICreateProject{
+public class CreateProject implements ICreateProject {
 
     private final IProjectRepository repository;
 
@@ -15,10 +18,11 @@ public class CreateProject implements ICreateProject{
 
     @Override
     @Transactional
-    public createProjectOutput execute(createProjectInput input){
-        final var id = repository.persist(input);
+    public CreateProjectOutput execute(CreateProjectInput input) {
+        final var ownerId = UserLogged.id();
+        final var id = repository.persist(ownerId, input);
         // TODO: RN8 — chamar memberRepository.persistOwner(id, input.requesterId())
-        return new ICreateProject.createProjectOutput(id);
+        return new CreateProjectOutput(id);
     }
 }
 
