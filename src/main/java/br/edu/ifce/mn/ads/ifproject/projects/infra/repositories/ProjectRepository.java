@@ -1,7 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
-import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProjectByIdAndUserId;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.CreateProjectSQL;
@@ -46,8 +46,8 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public Optional<IFindProject.FindProjectOutput> findById(UUID id) {
-        return findProjectSQL.execute(id);
+    public Optional<FindProjectOutput> findById(UUID id, UUID userId) {
+        return findProjectSQL.execute(id, userId);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package br.edu.ifce.mn.ads.ifproject.commons;
+package br.edu.ifce.mn.ads.ifproject._commons;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

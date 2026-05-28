@@ -1,11 +1,9 @@
 package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project;
 
-import br.edu.ifce.mn.ads.ifproject.commons.UserLogged;
+import br.edu.ifce.mn.ads.ifproject._commons.UserLogged;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Component
 public class CreateProject implements ICreateProject {
