@@ -1,15 +1,14 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
-import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.find_project.IFindProject;
-import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.CreateProjectSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.FindProjectSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ListArchivedProjectsSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.UpdateProjectSQL;
-import org.springframework.stereotype.Component;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +30,8 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public UUID persist(ICreateProject.createProjectInput input){
-        return createProjectSQL.execute(input);
+    public UUID persist(UUID ownerId, ICreateProject.CreateProjectInput input){
+        return createProjectSQL.execute(ownerId, input);
     }
 
     @Override
@@ -46,8 +45,8 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public Optional<IFindProject.FindProjectOutput> findById(UUID id) {
-        return findProjectSQL.execute(id);
+    public Optional<FindProjectOutput> findById(UUID id, UUID userId) {
+        return findProjectSQL.execute(id, userId);
     }
 
     @Override

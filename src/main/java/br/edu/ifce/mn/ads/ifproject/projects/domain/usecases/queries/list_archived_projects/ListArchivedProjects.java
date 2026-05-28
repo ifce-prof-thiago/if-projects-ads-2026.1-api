@@ -1,8 +1,8 @@
-package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects;
+package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects;
 
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 

@@ -9,16 +9,15 @@ import java.util.UUID;
 @Validated
 public interface ICreateProject {
 
-    ICreateProject.createProjectOutput execute(@Valid ICreateProject.createProjectInput input);
+    CreateProjectOutput execute(@Valid ICreateProject.CreateProjectInput input);
 
-    record CreateProjectRequest(@ProjectName String name) {}
-
-    record createProjectInput(
-            UUID requesterId,
+    record CreateProjectInput(
             @ProjectName String name
-    ){}
+    ) {
+    }
 
-    record createProjectOutput(
+    record CreateProjectOutput(
             UUID id
-    ){}
+    ) {
+    }
 }

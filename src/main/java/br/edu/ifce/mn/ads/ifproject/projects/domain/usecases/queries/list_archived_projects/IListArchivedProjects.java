@@ -1,4 +1,4 @@
-package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.list_archived_projects;
+package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;

@@ -10,9 +10,9 @@ import java.util.UUID;
 public class CreateProjectSQL {
 
     private final static String SQL = """
-                INSERT INTO projects(name, owner_id) VALUES (?, ?)
-                RETURNING id
-                """;
+            INSERT INTO projects(name, owner_id) VALUES (?, ?)
+            RETURNING id
+            """;
 
     private final JdbcClient jdbcClient;
 
@@ -20,12 +20,10 @@ public class CreateProjectSQL {
         this.jdbcClient = jdbcClient;
     }
 
-    public UUID execute(ICreateProject.createProjectInput input){
-
-
+    public UUID execute(UUID ownerId, ICreateProject.CreateProjectInput input) {
         return jdbcClient.sql(SQL)
                 .param(input.name())
-                .param(input.requesterId())
+                .param(ownerId)
                 .query(UUID.class)
                 .single();
     }
