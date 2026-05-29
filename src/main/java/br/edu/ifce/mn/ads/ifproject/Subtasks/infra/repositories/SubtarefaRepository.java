@@ -17,7 +17,7 @@ public class SubtarefaRepository {
     private JdbcTemplate jdbcTemplate;
 
     public void adicionar(SubtarefaDTO dto){
-        String sql = "INSERT INTO subtasks (id, task_id, description, position, is_completed, createdAt) " +
+        String sql = "INSERT INTO subtasks (id, task_id, description, position, is_completed, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, dto.getId(), dto.getTaskId(), dto.getTexto(),
                 dto.getPosicao(), false);

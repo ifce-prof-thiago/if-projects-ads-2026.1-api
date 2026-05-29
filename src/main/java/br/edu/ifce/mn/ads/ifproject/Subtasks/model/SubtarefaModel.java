@@ -1,8 +1,11 @@
 package br.edu.ifce.mn.ads.ifproject.Subtasks.model;
 
+import org.springframework.stereotype.Component;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Component
 public class SubtarefaModel {
     private UUID id;
     private UUID taskID;
