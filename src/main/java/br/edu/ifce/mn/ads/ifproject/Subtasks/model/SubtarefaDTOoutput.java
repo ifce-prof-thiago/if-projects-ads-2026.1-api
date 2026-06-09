@@ -3,7 +3,7 @@ package br.edu.ifce.mn.ads.ifproject.Subtasks.model;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public class SubtarefaDTO {
+public class SubtarefaDTOoutput {
     private UUID id;
     private UUID taskID;
     private String texto;
@@ -11,8 +11,8 @@ public class SubtarefaDTO {
     boolean status;
     OffsetDateTime data;
 
-    public SubtarefaDTO(UUID id, UUID taskID, String texto, Integer posicao,
-                        boolean status, OffsetDateTime data) {
+    public SubtarefaDTOoutput(UUID id, UUID taskID, String texto, Integer posicao,
+                             boolean status, OffsetDateTime data) {
         this.id = id;
         this.taskID = taskID;
         this.texto = texto;

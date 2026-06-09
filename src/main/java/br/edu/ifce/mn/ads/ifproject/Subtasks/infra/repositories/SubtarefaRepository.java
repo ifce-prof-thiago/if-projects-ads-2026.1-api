@@ -1,11 +1,13 @@
 package br.edu.ifce.mn.ads.ifproject.Subtasks.infra.repositories;
 
-import br.edu.ifce.mn.ads.ifproject.Subtasks.model.SubtarefaDTO;
+import br.edu.ifce.mn.ads.ifproject.Subtasks.model.SubtarefaDTOinput;
+import br.edu.ifce.mn.ads.ifproject.Subtasks.model.SubtarefaDTOoutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -16,14 +18,19 @@ public class SubtarefaRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void adicionar(SubtarefaDTO dto){
+    public void criar(SubtarefaDTOinput dto){
         String sql = "INSERT INTO subtasks (id, task_id, description, position, is_completed, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, dto.getId(), dto.getTaskId(), dto.getTexto(),
-                dto.getPosicao(), false);
+        jdbcTemplate.update(sql,
+                UUID.randomUUID(),
+                dto.getTaskId(),
+                dto.getTexto(),
+                dto.getPosicao(),
+                false,
+                Timestamp.from(Instant.now()));
     }
 
-    public List<SubtarefaDTO> listarPorTarefa(UUID taskId) {
+    public List<SubtarefaDTOoutput> listarPorTarefa(UUID taskId) {
         String sql = "SELECT id, task_id, description, position, is_completed, created_at " +
                 "FROM subtasks WHERE task_id = ?";
 
@@ -35,7 +42,7 @@ public class SubtarefaRepository {
                 dataFormatada = dbTimestamp.toInstant().atOffset(ZoneOffset.UTC);
             }
 
-            return new SubtarefaDTO(
+            return new SubtarefaDTOoutput(
                     UUID.fromString(rs.getString("id")),
                     UUID.fromString(rs.getString("task_id")),
                     rs.getString("description"),
@@ -46,23 +53,23 @@ public class SubtarefaRepository {
         }, taskId);
     }
 
-    public void editarTexto(SubtarefaDTO dto){
+    public void editarTexto(UUID id, String novoTexto) {
         String sql = "UPDATE subtasks SET description = ? WHERE id = ?";
-        jdbcTemplate.update(sql, dto.getTexto(), dto.getId());
+        jdbcTemplate.update(sql, novoTexto, id);
     }
 
-    public void remover(SubtarefaDTO dto){
-        String sql = "DELETE FROM subtasks WHERE id = ?";
-        jdbcTemplate.update(sql, dto.getId());
-    }
-
-    public void editarStatus(SubtarefaDTO dto){
+    public void editarStatus(UUID id, Boolean novoStatus) {
         String sql = "UPDATE subtasks SET is_completed = ? WHERE id = ?";
-        jdbcTemplate.update(sql, dto.getStatus() ,dto.getId());
+        jdbcTemplate.update(sql, novoStatus, id);
     }
 
-    public void editarPosicao(SubtarefaDTO dto){
+    public void editarPosicao(UUID id, Integer novaPosicao) {
         String sql = "UPDATE subtasks SET position = ? WHERE id = ?";
-        jdbcTemplate.update(sql, dto.getPosicao(), dto.getId());
+        jdbcTemplate.update(sql, novaPosicao, id);
+    }
+
+    public void remover(UUID id) {
+        String sql = "DELETE FROM subtasks WHERE id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }
