@@ -4,6 +4,8 @@ import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.BusinessRuleExcep
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.ResourceNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories.ISubTasksRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -17,24 +19,27 @@ public class ConversionSubTasks implements IConversionSubTasks {
     }
 
     @Override
-    public void execute(ConvertToTaskInput input) {
+    @Transactional
+    public void execute(ConversionSubTasksInput input) {
 
-        UUID subtaskId = input.getSubtaskId();
+        final var subtaskId = input.subtaskId();
 
-        SearchIdOutput searchIdOutput = repository.findParentTaskInfo(subtaskId)
+        final var searchIdOutput = repository.findParentTaskInfo(subtaskId)
                 .orElseThrow(() -> new ResourceNotFoundException("Subtask not found"));
 
-        if(repository.isCompletedSubtask(subtaskId)) {
+        if (repository.isCompletedSubtask(subtaskId)) {
             throw new BusinessRuleException("Subtask já está completada");
         }
 
-        input.setAssignee_id(searchIdOutput.assignee_id());
-        input.setTask_group_id(searchIdOutput.task_group_id());
-        input.setCreator_id(searchIdOutput.creator_id());
-
-        input.setPosition(repository.lastPositionTask() + 1);
-        input.setIs_archived(false);
-        input.setCreated_at(OffsetDateTime.now());
+        final var newTask = new ISubTasksRepository.ConvertToTaskInput(
+                searchIdOutput.task_group_id(),
+                searchIdOutput.creator_id(),
+                searchIdOutput.assignee_id(),
+                searchIdOutput.description(),
+                repository.lastPositionTask() + 1,
+                false,
+                OffsetDateTime.now()
+        );
 
         int positionConvertedSubtask = repository.getPositionConvertedSubtask(subtaskId);
 
@@ -44,8 +49,8 @@ public class ConversionSubTasks implements IConversionSubTasks {
         //UPDATE SUBTASKS WITH BIGGER POSITIONS THAN CONVERTED SUBTASK
         repository.updatePositionSubtasksAfterConversion(positionConvertedSubtask);
 
-        //CREAT NEW TASK
-        repository.persistNewTask(input);
+        //CREATE NEW TASK
+        repository.persistNewTask(newTask); // TODO utilizar o repositório de tasks
     }
 
 }

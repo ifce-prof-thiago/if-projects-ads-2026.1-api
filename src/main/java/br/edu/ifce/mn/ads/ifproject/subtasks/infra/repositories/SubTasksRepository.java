@@ -1,6 +1,5 @@
 package br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories;
 
-import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion.ConvertToTaskInput;
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion.SearchIdOutput;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -21,9 +20,9 @@ public class SubTasksRepository implements ISubTasksRepository {
 
         final var SQL = """
                 INSERT INTO tasks
-                (task_group_id, creator_id, assignee_id, title, description, priority, position, due_date, is_archived, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id
+                (task_group_id, creator_id, assignee_id, title, position, is_archived, created_at) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id
                 """;
-        return db.sql(SQL).params(input.getTask_group_id(), input.getCreator_id(), input.getAssignee_id(), input.getTitle(), input.getNewDescription(), input.getPriority(), input.getPosition(), input.getDueDate(), input.getIs_archived(), input.getCreated_at()).query(UUID.class).single();
+        return db.sql(SQL).params(input.task_group_id(), input.creator_id(), input.assignee_id(), input.title(), input.position(), input.is_archived(), input.created_at()).query(UUID.class).single();
 
     }
 
@@ -31,33 +30,34 @@ public class SubTasksRepository implements ISubTasksRepository {
     public Optional<SearchIdOutput> findParentTaskInfo(UUID id) {
 
         final var SQL = """
-                SELECT t.task_group_id, t.creator_id, t.assignee_id
+                SELECT t.task_group_id, t.creator_id, t.assignee_id, st.description
                 FROM subtasks st JOIN tasks t ON st.task_id = t.id
                 WHERE st.id = ?
                 """;
 
         return db.sql(SQL).param(id).query(
-                (rs, rowNum) -> {
-                return new SearchIdOutput(
-                    UUID.fromString(rs.getString("assignee_id")),
-                    UUID.fromString(rs.getString("creator_id")),
-                    UUID.fromString(rs.getString("task_group_id")));}
+                (rs, rowNum) -> new SearchIdOutput(
+                        rs.getObject("assignee_id", UUID.class),
+                        UUID.fromString(rs.getString("creator_id")),
+                        UUID.fromString(rs.getString("task_group_id")),
+                        rs.getString("description")
+                )
         ).optional();
     }
 
     @Override
     public void removeSubtask(UUID id) {
-
         final var SQL = """
-               DELETE FROM subtasks
-               WHERE id = ?
-               """;
+                DELETE FROM subtasks
+                WHERE id = ?
+                """;
 
         db.sql(SQL).param(id).update();
     }
 
-    public int lastPositionTask(){
+    public int lastPositionTask() {
 
+        // TODO buscar a maior posição dentro de um grupo de tarefas
         final var SQL = """
                 SELECT MAX(position) FROM tasks
                 """;
@@ -66,7 +66,7 @@ public class SubTasksRepository implements ISubTasksRepository {
     }
 
     @Override
-    public boolean isCompletedSubtask(UUID id){
+    public boolean isCompletedSubtask(UUID id) {
 
         final var SQL = """
                 SELECT is_completed FROM subtasks WHERE id = ?

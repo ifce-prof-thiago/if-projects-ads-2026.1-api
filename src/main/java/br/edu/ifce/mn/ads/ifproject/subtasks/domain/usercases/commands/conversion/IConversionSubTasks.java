@@ -1,13 +1,15 @@
 package br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion;
 
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreateUser;
+import jakarta.validation.constraints.NotNull;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.UUID;
 
 public interface IConversionSubTasks {
 
-    public void execute(ConvertToTaskInput input);
+    void execute(ConversionSubTasksInput input);
 
+    record ConversionSubTasksInput(
+            @NotNull(message = "Campo não pode ser nulo") UUID subtaskId
+    ) {
+    }
 }
