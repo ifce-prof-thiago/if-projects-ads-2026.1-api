@@ -102,4 +102,35 @@ public class BoardRepository implements IBoardRepository{
                 .param(boardId)
                 .update();
     }
+
+    public UUID duplicateBoardData(UUID originalBoardId, String newName){
+
+        final var SQL = """
+            INSERT INTO boards (name, project_id, color_hex, is_archived)
+            SELECT ?, project_id, color_hex, false
+            FROM boards WHERE id = ?
+            RETURNING id
+            """;;
+
+        return db.sql(SQL)
+                .param(newName)
+                .param(originalBoardId)
+                .query(UUID.class)
+                .single();
+    }
+
+    public void duplicateTaskGroups(UUID originalBoardId, UUID newBoardId){
+
+        final var SQL = """
+            INSERT INTO task_groups (name, position, board_id)
+            SELECT name, position, ?
+            FROM task_groups WHERE board_id = ?
+            """;
+
+        db.sql(SQL)
+                .param(newBoardId)
+                .param(originalBoardId)
+                .update();
+    }
+
 }
