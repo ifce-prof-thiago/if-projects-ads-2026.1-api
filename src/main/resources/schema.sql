@@ -1,7 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- 1. Tabela de Usuários
 CREATE TABLE users
 (
-    id            UUID PRIMARY KEY         DEFAULT uuidv7(),
+    id            UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     username      VARCHAR(50)  NOT NULL UNIQUE,
     email         VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -12,7 +13,7 @@ CREATE TABLE users
 -- 2. Tabela de Projetos
 CREATE TABLE projects
 (
-    id          UUID PRIMARY KEY         DEFAULT uuidv7(),
+    id          UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     name        VARCHAR(100) NOT NULL,
     owner_id    UUID         NOT NULL REFERENCES users (id),
     archived_at TIMESTAMP WITH TIME ZONE,
@@ -32,7 +33,7 @@ CREATE TABLE project_members
 -- 4. Tabela de Quadros
 CREATE TABLE boards
 (
-    id          UUID PRIMARY KEY         DEFAULT uuidv7(),
+    id          UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     project_id  UUID REFERENCES projects (id) ON DELETE CASCADE,
     name        VARCHAR(100) NOT NULL,
     color_hex   VARCHAR(7)               DEFAULT '#ebecf0',
@@ -43,7 +44,7 @@ CREATE TABLE boards
 -- 5. Grupos de Tarefas
 CREATE TABLE task_groups
 (
-    id          UUID PRIMARY KEY         DEFAULT uuidv7(),
+    id          UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     board_id    UUID REFERENCES boards (id) ON DELETE CASCADE,
     name        VARCHAR(100) NOT NULL,
     position    INTEGER      NOT NULL, -- RF12: Ordenação dinâmica
@@ -54,7 +55,7 @@ CREATE TABLE task_groups
 -- 6. Tarefas
 CREATE TABLE tasks
 (
-    id            UUID PRIMARY KEY         DEFAULT uuidv7(),
+    id            UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     task_group_id UUID REFERENCES task_groups (id) ON DELETE CASCADE,
     creator_id    UUID REFERENCES users (id),
     assignee_id   UUID         REFERENCES users (id) ON DELETE SET NULL,
@@ -70,7 +71,7 @@ CREATE TABLE tasks
 -- 7. Subtarefas
 CREATE TABLE subtasks
 (
-    id           UUID PRIMARY KEY         DEFAULT uuidv7(),
+    id           UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     task_id      UUID REFERENCES tasks (id) ON DELETE CASCADE,
     description  TEXT    NOT NULL,
     is_completed BOOLEAN                  DEFAULT FALSE,
