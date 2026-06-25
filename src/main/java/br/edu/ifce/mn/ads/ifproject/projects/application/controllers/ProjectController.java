@@ -2,8 +2,13 @@ package br.edu.ifce.mn.ads.ifproject.projects.application.controllers;
 
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.delete_project.IDeleteProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProjectByIdAndUserId;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_projects.IListProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.add_member.IAddMember;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.remove_member.IRemoveMember;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectMemberRepository;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +24,21 @@ public class ProjectController {
     private final IUpdateProject updateProject;
     private final IListArchivedProjects listArchivedProjects;
     private final IFindProjectByIdAndUserId findProject;
+    private final IAddMember addMember;
+    private final IRemoveMember removeMember;
 
     public ProjectController(ICreateProject createProject,
                              IUpdateProject updateProject,
                              IListArchivedProjects listArchivedProjects,
-                             IFindProjectByIdAndUserId findProject) {
+                             IFindProjectByIdAndUserId findProject,
+                             IAddMember addMember,
+                             IRemoveMember removeMember) {
         this.createProject = createProject;
         this.updateProject = updateProject;
         this.listArchivedProjects = listArchivedProjects;
         this.findProject = findProject;
+        this.addMember = addMember;
+        this.removeMember = removeMember;
     }
 
     //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
@@ -53,6 +64,19 @@ public class ProjectController {
         return findProject.execute(id);
     }
 
+    @PostMapping("/{id}/members")
+    public IAddMember.AddMemberOutput postMember(
+            @PathVariable UUID id,
+            @RequestBody IAddMember.AddMemberInput input) {
+        return addMember.execute(id, input);
+    }
+
+    @DeleteMapping("/{id}/members/{userId}")
+    public IRemoveMember.RemoveMemberOutput deleteMember(
+            @PathVariable UUID id,
+            @PathVariable UUID userId) {
+        return removeMember.execute(id, userId);
+    }
 
     @GetMapping("/archived")
     public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId, Pageable pageable) {
