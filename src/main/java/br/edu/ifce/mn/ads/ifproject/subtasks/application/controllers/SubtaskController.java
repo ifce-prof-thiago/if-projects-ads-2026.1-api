@@ -1,7 +1,9 @@
 package br.edu.ifce.mn.ads.ifproject.subtasks.application.controllers;
 
-<<<<<<< HEAD
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usecases.commands.toggle.IToggleSubtask;
+import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion.ConvertToTaskInput;
+import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion.IConversionSubTasks;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -10,9 +12,11 @@ import java.util.UUID;
 @RequestMapping("api/v1/subtasks")
 public class SubtaskController {
     private final IToggleSubtask toggleSubtask;
+    private final IConversionSubTasks conversionSubTasks;
 
-    public SubtaskController(IToggleSubtask toggleSubtask) {
+    public SubtaskController(IToggleSubtask toggleSubtask, IConversionSubTasks conversionSubTasks) {
         this.toggleSubtask = toggleSubtask;
+        this.conversionSubTasks = conversionSubTasks;
     }
 
     @PatchMapping("{subtask_id}/toggle")
@@ -21,25 +25,6 @@ public class SubtaskController {
     ) {
         return toggleSubtask.execute(id);
     }
-}
-=======
-import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion.ConvertToTaskInput;
-import br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion.IConversionSubTasks;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-@RequestMapping("api/v1/subtask")
-public class SubtaskController {
-
-    private final IConversionSubTasks conversionSubTasks;
-
-    public SubtaskController(IConversionSubTasks conversionSubTasks) {
-        this.conversionSubTasks = conversionSubTasks;
-    }
 
     @PostMapping("/conversion")
     public void conversionSubtask(@RequestBody @Valid ConvertToTaskInput input) {
@@ -47,4 +32,3 @@ public class SubtaskController {
     }
 
 }
->>>>>>> feat/subtask-conversion

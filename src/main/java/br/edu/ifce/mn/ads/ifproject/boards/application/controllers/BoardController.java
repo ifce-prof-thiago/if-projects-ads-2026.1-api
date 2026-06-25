@@ -21,55 +21,46 @@ public class BoardController {
     private final IUpdateBoard updateBoard;
     private final IFindBoardsByProject findByProject;
     private final IDeleteBoard deleteBoard;
-<<<<<<< HEAD
-    private final IArchiveBoard archiveBoard;
-=======
+//    private final IArchiveBoard archiveBoard;
     private final IDuplicateBoard duplicateBoard;
 
-    public record DuplicateBoardPayload(String newBoardName){}
->>>>>>> origin/feat/duplicateBoard
-
-    public BoardController(
-            ICreateBoard createBoard,
-            IReadBoard readBoard,
-            IUpdateBoard updateBoard,
-            IFindBoardsByProject findByProject,
-<<<<<<< HEAD
-            IDeleteBoard deleteBoard, IArchiveBoard archiveBoard
-=======
-            IDeleteBoard deleteBoard,
-            IDuplicateBoard duplicateBoard
->>>>>>> origin/feat/duplicateBoard
+    public BoardController(ICreateBoard createBoard,
+                           IReadBoard readBoard,
+                           IUpdateBoard updateBoard,
+                           IFindBoardsByProject findByProject,
+                           IDeleteBoard deleteBoard,
+//                           IArchiveBoard archiveBoard,
+                           IDuplicateBoard duplicateBoard
     ) {
         this.createBoard = createBoard;
         this.readBoard = readBoard;
         this.updateBoard = updateBoard;
         this.findByProject = findByProject;
         this.deleteBoard = deleteBoard;
-<<<<<<< HEAD
-        this.archiveBoard = archiveBoard;
-=======
+//        this.archiveBoard = archiveBoard;
         this.duplicateBoard = duplicateBoard;
->>>>>>> origin/feat/duplicateBoard
+    }
+
+    public record DuplicateBoardPayload(String newBoardName) {
     }
 
     @PostMapping
-    public ICreateBoard.CreateBoardOutput post(@RequestBody ICreateBoard.CreateBoardInput input){
+    public ICreateBoard.CreateBoardOutput post(@RequestBody ICreateBoard.CreateBoardInput input) {
         return createBoard.execute(input);
     }
 
     @GetMapping(value = "/{id}")
-    public IReadBoard.ReadBoardOutput get(@PathVariable UUID id){
+    public IReadBoard.ReadBoardOutput get(@PathVariable UUID id) {
         return readBoard.execute(new IReadBoard.ReadBoardInput(id));
     }
 
     @PatchMapping(value = "/{id}")
-    public IUpdateBoard.UpdateBoardOutput patch(@PathVariable UUID id, @RequestBody IUpdateBoard.UpdateBoardInput input){
+    public IUpdateBoard.UpdateBoardOutput patch(@PathVariable UUID id, @RequestBody IUpdateBoard.UpdateBoardInput input) {
         return updateBoard.execute(id, input);
     }
 
     @GetMapping(value = "/project/{projectId}")
-    public IFindBoardsByProject.FindBoardsByProjectOutput getByProjectId(@PathVariable UUID projectId){
+    public IFindBoardsByProject.FindBoardsByProjectOutput getByProjectId(@PathVariable UUID projectId) {
         return findByProject.execute(new IFindBoardsByProject.FindBoardsByProjectInput(projectId));
     }
 
@@ -78,28 +69,24 @@ public class BoardController {
     public void delete(
             @PathVariable UUID id,
             @RequestHeader("X-User-Id") UUID requesterId
-    ){
+    ) {
         deleteBoard.execute(id, requesterId);
     }
 
-<<<<<<< HEAD
-    // Rota: PATCH http://localhost:8080/api/v1/boards/{board_id}/archive
-    @PatchMapping("{board_id}/archive")
-    public IArchiveBoard.ArchiveBoardOutput patch(
-            @PathVariable("board_id") UUID id
-    ) {
-        // Passa o ID recebido na URL paraocaso de uso processar
-        return archiveBoard.execute(id);
-    }
-}
-=======
+//    @PatchMapping("{board_id}/archive")
+//    public IArchiveBoard.ArchiveBoardOutput patch(
+//            @PathVariable("board_id") UUID id
+//    ) {
+//        return archiveBoard.execute(id);
+//    }
+
     @PostMapping(value = "/{id}/duplicate")
     @ResponseStatus(HttpStatus.CREATED)
     public IDuplicateBoard.DuplicateBoardOutput duplicate(
             @PathVariable UUID id,
             @RequestHeader("X-User-Id") UUID requesterId,
-            @RequestBody DuplicateBoardPayload payload
-    ){
+            @RequestBody BoardController.DuplicateBoardPayload payload
+    ) {
         var input = new IDuplicateBoard.DuplicateBoardInput(
                 id,
                 payload.newBoardName(),
@@ -109,4 +96,3 @@ public class BoardController {
         return duplicateBoard.execute(input);
     }
 }
->>>>>>> origin/feat/duplicateBoard
