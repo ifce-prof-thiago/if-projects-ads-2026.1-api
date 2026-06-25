@@ -17,4 +17,7 @@ public interface IBoardRepository {
     UUID update(UUID id, IUpdateBoard.UpdateBoardInput input);
 
     List<IFindBoardsByProject.BoardItem> findByProjectId(UUID projectId);
+
+    boolean isUserAuthorizedToDelete(UUID boardId, UUID userId);
+    void delete(UUID boardId);
 }
