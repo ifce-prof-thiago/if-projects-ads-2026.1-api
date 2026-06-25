@@ -20,4 +20,7 @@ public interface IBoardRepository {
 
     boolean isUserAuthorizedToDelete(UUID boardId, UUID userId);
     void delete(UUID boardId);
+
+    UUID duplicateBoardData(UUID originalBoardId, String newName);
+    void duplicateTaskGroups(UUID originalBoardId, UUID newBoardId);
 }
