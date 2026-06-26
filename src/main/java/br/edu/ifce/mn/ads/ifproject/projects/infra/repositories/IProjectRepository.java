@@ -33,4 +33,20 @@ public interface IProjectRepository {
             LocalDateTime archivedAt
     ) {
     }
+
+    void archive(UUID id);
+
+    void restore(UUID id);
+
+    void archiveBoardsByProjectId(UUID projectId);
+
+    void archiveTaskGroupsByProjectId(UUID projectId);
+
+    void archiveTasksByProjectId(UUID projectId);
+
+    void restoreBoardsByProjectId(UUID projectId);
+
+    void restoreTaskGroupsByProjectId(UUID projectId);
+
+    void restoreTasksByProjectId(UUID projectId);
 }
