@@ -1,6 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.projects.application.controllers;
 
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.archive_project.IArchiveProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.restore_project.IRestoreProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.delete_project.IDeleteProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProjectByIdAndUserId;
@@ -26,19 +28,25 @@ public class ProjectController {
     private final IFindProjectByIdAndUserId findProject;
     private final IAddMember addMember;
     private final IRemoveMember removeMember;
+    private final IArchiveProject archiveProject;
+    private final IRestoreProject restoreProject;
 
     public ProjectController(ICreateProject createProject,
                              IUpdateProject updateProject,
                              IListArchivedProjects listArchivedProjects,
                              IFindProjectByIdAndUserId findProject,
                              IAddMember addMember,
-                             IRemoveMember removeMember) {
+                             IRemoveMember removeMember,
+                             IArchiveProject archiveProject,
+                             IRestoreProject restoreProject) {
         this.createProject = createProject;
         this.updateProject = updateProject;
         this.listArchivedProjects = listArchivedProjects;
         this.findProject = findProject;
         this.addMember = addMember;
         this.removeMember = removeMember;
+        this.archiveProject = archiveProject;
+        this.restoreProject = restoreProject;
     }
 
     //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
@@ -78,9 +86,21 @@ public class ProjectController {
         return removeMember.execute(id, userId);
     }
 
+    @PatchMapping("/{id}/archive")
+    public IArchiveProject.ArchiveProjectOutput archive(@PathVariable UUID id) {
+        return archiveProject.execute(id);
+    }
+
+    @PatchMapping("/{id}/restore")
+    public IRestoreProject.RestoreProjectOutput restore(@PathVariable UUID id) {
+        return restoreProject.execute(id);
+    }
+
     @GetMapping("/archived")
     public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId, Pageable pageable) {
         var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, pageable);
         return listArchivedProjects.execute(input, pageable);
     }
+
+
 }

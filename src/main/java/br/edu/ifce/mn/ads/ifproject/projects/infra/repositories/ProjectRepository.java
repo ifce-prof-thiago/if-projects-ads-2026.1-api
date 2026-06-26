@@ -71,6 +71,7 @@ public class ProjectRepository implements IProjectRepository {
     @Override
     public Optional<FindProjectOutput> findById(UUID id, UUID userId) {
         return findProjectSQL.execute(id, userId);
+
     }
 
     @Override
