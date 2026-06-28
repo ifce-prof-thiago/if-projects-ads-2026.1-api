@@ -1,8 +1,8 @@
-package br.edu.ifce.mn.ads.ifproject.subtasks.domain.usercases.commands.conversion;
+package br.edu.ifce.mn.ads.ifproject.subtasks.domain.usecases.commands.conversion;
 
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.BusinessRuleException;
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.ResourceNotFoundException;
-import br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories.ISubTasksRepository;
+import br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories.ISubtaskRepository;
 import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -10,16 +10,16 @@ import java.util.UUID;
 @Component
 public class ConversionSubTasks implements IConversionSubTasks {
 
-    ISubTasksRepository repository;
+    ISubtaskRepository repository;
 
-    public ConversionSubTasks(ISubTasksRepository repository) {
+    public ConversionSubTasks(ISubtaskRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public void execute(ConvertToTaskInput input) {
+    public void execute(ConversionSubtaskInput input) {
 
-        UUID subtaskId = input.getSubtaskId();
+        UUID subtaskId = input.subtaskId();
 
         SearchIdOutput searchIdOutput = repository.findParentTaskInfo(subtaskId)
                 .orElseThrow(() -> new ResourceNotFoundException("Subtask not found"));
@@ -28,13 +28,14 @@ public class ConversionSubTasks implements IConversionSubTasks {
             throw new BusinessRuleException("Subtask já está completada");
         }
 
-        input.setAssignee_id(searchIdOutput.assignee_id());
-        input.setTask_group_id(searchIdOutput.task_group_id());
-        input.setCreator_id(searchIdOutput.creator_id());
-
-        input.setPosition(repository.lastPositionTask() + 1);
-        input.setIs_archived(false);
-        input.setCreated_at(OffsetDateTime.now());
+        final ISubtaskRepository.ConvertToTaskInput newTask = new ISubtaskRepository.ConvertToTaskInput(
+                searchIdOutput.task_group_id(),
+                searchIdOutput.creator_id(),
+                searchIdOutput.assignee_id(),
+                searchIdOutput.description(),
+                repository.lastPositionTask() + 1,
+                false,
+                OffsetDateTime.now());
 
         int positionConvertedSubtask = repository.getPositionConvertedSubtask(subtaskId);
 
@@ -42,10 +43,10 @@ public class ConversionSubTasks implements IConversionSubTasks {
         repository.removeSubtask(subtaskId);
 
         //UPDATE SUBTASKS WITH BIGGER POSITIONS THAN CONVERTED SUBTASK
-        repository.updatePositionSubtasksAfterConversion(positionConvertedSubtask);
+        repository.updatePositionSubtasksAfterConversion(positionConvertedSubtask, searchIdOutput.task_id());
 
         //CREAT NEW TASK
-        repository.persistNewTask(input);
+        repository.persistNewTask(newTask);
     }
 
 }

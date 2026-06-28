@@ -1,4 +1,4 @@
-package br.edu.ifce.mn.ads.ifproject.Subtasks.model;
+package br.edu.ifce.mn.ads.ifproject.subtasks.model;
 
 import org.springframework.stereotype.Component;
 
