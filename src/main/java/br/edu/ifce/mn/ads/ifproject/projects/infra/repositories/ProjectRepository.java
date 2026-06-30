@@ -3,6 +3,20 @@ package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.CreateProjectSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.FindProjectSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ListArchivedProjectsSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.UpdateProjectSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ArchiveBoardsSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ArchiveProjectSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ArchiveTaskGroupsSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.ArchiveTasksSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.FindOwnerIdSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.RestoreBoardsSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.RestoreProjectSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.RestoreTaskGroupsSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.RestoreTasksSQL;
+import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.TransferOwnershipSQL;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -26,6 +40,8 @@ public class ProjectRepository implements IProjectRepository {
     private final RestoreBoardsSQL restoreBoardsSQL;
     private final RestoreTaskGroupsSQL restoreTaskGroupsSQL;
     private final RestoreTasksSQL restoreTasksSQL;
+    private final FindOwnerIdSQL findOwnerIdSQL;
+    private final TransferOwnershipSQL transferOwnershipSQL;
 
     public ProjectRepository(UpdateProjectSQL updateProjectSQL,
                              CreateProjectSQL createProjectSQL,
@@ -39,7 +55,10 @@ public class ProjectRepository implements IProjectRepository {
                              ArchiveTasksSQL archiveTasksSQL,
                              RestoreBoardsSQL restoreBoardsSQL,
                              RestoreTaskGroupsSQL restoreTaskGroupsSQL,
-                             RestoreTasksSQL restoreTasksSQL) {
+                             RestoreTasksSQL restoreTasksSQL,
+                             FindOwnerIdSQL findOwnerIdSQL,
+                             TransferOwnershipSQL transferOwnershipSQL
+                             ) {
         this.listArchivedProjectsSQL = listArchivedProjectsSQL;
         this.createProjectSQL = createProjectSQL;
         this.updateProjectSQL = updateProjectSQL;
@@ -52,6 +71,9 @@ public class ProjectRepository implements IProjectRepository {
         this.restoreBoardsSQL = restoreBoardsSQL;
         this.restoreTaskGroupsSQL = restoreTaskGroupsSQL;
         this.restoreTasksSQL = restoreTasksSQL;
+        this.findOwnerIdSQL = findOwnerIdSQL;
+        this.transferOwnershipSQL = transferOwnershipSQL;
+
     }
 
     @Override
@@ -127,6 +149,21 @@ public class ProjectRepository implements IProjectRepository {
     public void restoreTasksByProjectId(UUID projectId) {
         restoreTasksSQL.execute(projectId);
 
+    }
+
+    @Override
+    public List<ListProjectsOutput> findAllByUserId(UUID userId, Pageable pageable) {
+        return listProjectsSQL.execute(userId, pageable);
+    }
+
+    @Override
+    public UUID findOwnerId(UUID projectId) {
+        return findOwnerIdSQL.execute(projectId);
+    }
+
+    @Override
+    public void transferOwnership(UUID projectId, UUID newOwnerId) {
+        transferOwnershipSQL.execute(projectId, newOwnerId);
     }
 
 }

@@ -15,6 +15,12 @@ public interface IProjectMemberRepository {
 
     boolean exists(UUID projectId, UUID userId);
 
+    void updateRole(UUID projectId, UUID userId, String role);
+
+    List<ListMembersOutput> findAllByProjectId(UUID projectId, Pageable pageable);
+
+    Optional<String> findRole(UUID projectId, UUID userId);
+
     record ListMembersOutput(
             UUID userId,
             String username,

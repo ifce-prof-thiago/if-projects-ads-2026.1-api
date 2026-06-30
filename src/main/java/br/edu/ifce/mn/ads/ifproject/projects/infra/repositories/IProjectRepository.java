@@ -49,4 +49,17 @@ public interface IProjectRepository {
     void restoreTaskGroupsByProjectId(UUID projectId);
 
     void restoreTasksByProjectId(UUID projectId);
+
+    List<ListProjectsOutput> findAllByUserId(UUID userId, Pageable pageable);
+
+    UUID findOwnerId(UUID projectId);
+
+    void transferOwnership(UUID projectId, UUID newOwnerId);
+
+    record ListProjectsOutput(
+            UUID id,
+            String name,
+            UUID ownerId,
+            LocalDateTime createdAt) {
+    }
 }

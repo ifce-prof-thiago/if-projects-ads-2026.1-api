@@ -3,9 +3,12 @@ package br.edu.ifce.mn.ads.ifproject.projects.application.controllers;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.archive_project.IArchiveProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.restore_project.IRestoreProject;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.transfer_ownership.ITransferOwnership;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_member_role.IUpdateMemberRole;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.update_project.IUpdateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.delete_project.IDeleteProject;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.find_project.IFindProjectByIdAndUserId;
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_members.IListMembers;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_projects.IListProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects.IListArchivedProjects;
 import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.add_member.IAddMember;
@@ -30,6 +33,9 @@ public class ProjectController {
     private final IRemoveMember removeMember;
     private final IArchiveProject archiveProject;
     private final IRestoreProject restoreProject;
+    private final ITransferOwnership transferOwnership;
+    private final IUpdateMemberRole updateMemberRole;
+    private final IListMembers listMembers;
 
     public ProjectController(ICreateProject createProject,
                              IUpdateProject updateProject,
@@ -38,7 +44,10 @@ public class ProjectController {
                              IAddMember addMember,
                              IRemoveMember removeMember,
                              IArchiveProject archiveProject,
-                             IRestoreProject restoreProject) {
+                             IRestoreProject restoreProject,
+                             ITransferOwnership transferOwnership,
+                             IUpdateMemberRole updateMemberRole,
+                             IListMembers listMembers) {
         this.createProject = createProject;
         this.updateProject = updateProject;
         this.listArchivedProjects = listArchivedProjects;
@@ -47,6 +56,9 @@ public class ProjectController {
         this.removeMember = removeMember;
         this.archiveProject = archiveProject;
         this.restoreProject = restoreProject;
+        this.updateMemberRole = updateMemberRole;
+        this.listMembers = listMembers;
+        this.transferOwnership = transferOwnership;
     }
 
     //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
@@ -100,6 +112,27 @@ public class ProjectController {
     public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId, Pageable pageable) {
         var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, pageable);
         return listArchivedProjects.execute(input, pageable);
+    }
+
+    @GetMapping("/{id}/members")
+    public List<IProjectMemberRepository.ListMembersOutput> getMembers(
+            @PathVariable UUID id, Pageable pageable) {
+        return listMembers.execute(id, pageable);
+    }
+
+    @PatchMapping("/{id}/members/{userId}")
+    public IUpdateMemberRole.UpdateMemberRoleOutput patchMemberRole(
+            @PathVariable UUID id,
+            @PathVariable UUID userId,
+            @RequestBody IUpdateMemberRole.UpdateMemberRoleInput input) {
+        return updateMemberRole.execute(id, userId, input);
+    }
+
+    @PatchMapping("/{id}/transfer")
+    public ITransferOwnership.TransferOwnershipOutput transfer(
+            @PathVariable UUID id,
+            @RequestBody ITransferOwnership.TransferOwnershipInput input) {
+        return transferOwnership.execute(id, input);
     }
 
 
