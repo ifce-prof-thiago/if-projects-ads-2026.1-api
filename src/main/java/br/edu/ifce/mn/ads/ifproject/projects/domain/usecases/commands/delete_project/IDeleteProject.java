@@ -1,8 +1,11 @@
 package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.delete_project;
 
-import br.edu.ifce.mn.ads.ifproject.projects.domain.models.ProjectName;
+import java.util.UUID;
 
 public interface IDeleteProject {
 
-    record DeleteProjectRequest(@ProjectName String name){}
+    DeleteProjectOutput execute(UUID projectId);
+
+    record DeleteProjectOutput(UUID id) {
+    }
 }

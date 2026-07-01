@@ -31,7 +31,9 @@ public class ProjectRepository implements IProjectRepository {
     private final ListArchivedProjectsSQL listArchivedProjectsSQL;
     private final CreateProjectSQL createProjectSQL;
     private final UpdateProjectSQL updateProjectSQL;
+    private final DeleteProjectSQL deleteProjectSQL;
     private final FindProjectSQL findProjectSQL;
+    private final ListProjectsSQL listProjectsSQL;
     private final ArchiveProjectSQL archiveProjectSQL;
     private final RestoreProjectSQL restoreProjectSQL;
     private final ArchiveBoardsSQL archiveBoardsSQL;
@@ -46,8 +48,8 @@ public class ProjectRepository implements IProjectRepository {
     public ProjectRepository(UpdateProjectSQL updateProjectSQL,
                              CreateProjectSQL createProjectSQL,
                              ListArchivedProjectsSQL listArchivedProjectsSQL,
-                             FindProjectSQL findProjectSQL,
-                             FindProjectSQL findProjectSQL1,
+                             FindProjectSQL findProjectSQL, DeleteProjectSQL deleteProjectSQL,
+                             FindProjectSQL findProjectSQL1, ListProjectsSQL listProjectsSQL,
                              ArchiveProjectSQL archiveProjectSQL,
                              RestoreProjectSQL restoreProjectSQL,
                              ArchiveBoardsSQL archiveBoardsSQL,
@@ -62,7 +64,9 @@ public class ProjectRepository implements IProjectRepository {
         this.listArchivedProjectsSQL = listArchivedProjectsSQL;
         this.createProjectSQL = createProjectSQL;
         this.updateProjectSQL = updateProjectSQL;
+        this.deleteProjectSQL = deleteProjectSQL;
         this.findProjectSQL = findProjectSQL1;
+        this.listProjectsSQL = listProjectsSQL;
         this.archiveProjectSQL = archiveProjectSQL;
         this.restoreProjectSQL = restoreProjectSQL;
         this.archiveBoardsSQL = archiveBoardsSQL;
@@ -88,6 +92,7 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     public void delete(UUID id){
+        deleteProjectSQL.execute(id);
     }
 
     @Override

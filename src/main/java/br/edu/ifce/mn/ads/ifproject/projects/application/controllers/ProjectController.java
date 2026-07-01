@@ -27,6 +27,8 @@ public class ProjectController {
 
     private final ICreateProject createProject;
     private final IUpdateProject updateProject;
+    private final IDeleteProject deleteProject;
+    private final IListProjects listProjects;
     private final IListArchivedProjects listArchivedProjects;
     private final IFindProjectByIdAndUserId findProject;
     private final IAddMember addMember;
@@ -39,6 +41,8 @@ public class ProjectController {
 
     public ProjectController(ICreateProject createProject,
                              IUpdateProject updateProject,
+                             IDeleteProject deleteProject,
+                             IListProjects listProjects,
                              IListArchivedProjects listArchivedProjects,
                              IFindProjectByIdAndUserId findProject,
                              IAddMember addMember,
@@ -50,6 +54,8 @@ public class ProjectController {
                              IListMembers listMembers) {
         this.createProject = createProject;
         this.updateProject = updateProject;
+        this.deleteProject = deleteProject;
+        this.listProjects = listProjects;
         this.listArchivedProjects = listArchivedProjects;
         this.findProject = findProject;
         this.addMember = addMember;
@@ -76,12 +82,22 @@ public class ProjectController {
         return updateProject.execute(id, input);
     }
 
+    @GetMapping
+    public List<IProjectRepository.ListProjectsOutput> get(Pageable pageable) {
+        return listProjects.execute(pageable);
+    }
+
     //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
     @GetMapping("/{id}")
     public IProjectRepository.FindProjectOutput getById(
             @PathVariable UUID id) {
 
         return findProject.execute(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public IDeleteProject.DeleteProjectOutput delete(@PathVariable UUID id) {
+        return deleteProject.execute(id);
     }
 
     @PostMapping("/{id}/members")
