@@ -17,6 +17,7 @@ public class UpdateProjectSQL {
 
     public UpdateProjectSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public void execute(UUID id, IUpdateProject.UpdateProjectInput input) {
