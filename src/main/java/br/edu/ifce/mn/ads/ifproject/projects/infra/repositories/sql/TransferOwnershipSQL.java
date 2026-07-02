@@ -16,6 +16,7 @@ public class TransferOwnershipSQL {
 
     public TransferOwnershipSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public void execute(UUID projectId, UUID newOwnerId) {

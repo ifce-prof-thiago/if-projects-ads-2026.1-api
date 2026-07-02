@@ -6,5 +6,6 @@ public class MemberNotFoundException extends RuntimeException {
 
     public MemberNotFoundException(UUID userId) {
         super("Member not found in project: " + userId, null, true, false);
+
     }
 }

@@ -6,5 +6,6 @@ public class ProjectAlreadyArchivedException extends RuntimeException {
 
     public ProjectAlreadyArchivedException(UUID id) {
         super("Project is already archived: " + id, null, true, false);
+
     }
 }

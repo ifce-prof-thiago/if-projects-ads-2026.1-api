@@ -6,5 +6,6 @@ public class ProjectNotArchivedException extends RuntimeException {
 
     public ProjectNotArchivedException(UUID id) {
         super("Project is not archived: " + id, null, true, false);
+
     }
 }

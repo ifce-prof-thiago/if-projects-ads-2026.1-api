@@ -17,6 +17,7 @@ public class ArchiveTaskGroupsSQL {
 
     public ArchiveTaskGroupsSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public void execute(UUID projectId) {

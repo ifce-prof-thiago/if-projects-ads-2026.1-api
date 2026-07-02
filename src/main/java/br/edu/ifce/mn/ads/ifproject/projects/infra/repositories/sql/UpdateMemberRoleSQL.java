@@ -16,6 +16,7 @@ public class UpdateMemberRoleSQL {
 
     public UpdateMemberRoleSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public void execute(UUID projectId, UUID userId, String role) {

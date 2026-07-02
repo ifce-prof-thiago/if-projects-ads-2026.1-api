@@ -16,6 +16,7 @@ public class RestoreBoardsSQL {
 
     public RestoreBoardsSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public void execute(UUID projectId) {

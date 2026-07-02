@@ -4,5 +4,6 @@ public class CannotRemoveOwnerException extends RuntimeException {
 
     public CannotRemoveOwnerException() {
         super("Cannot remove the owner from the project", null, true, false);
+
     }
 }

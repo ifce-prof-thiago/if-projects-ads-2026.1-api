@@ -17,6 +17,7 @@ public class FindMemberRoleSQL {
 
     public FindMemberRoleSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public Optional<String> execute(UUID projectId, UUID userId) {

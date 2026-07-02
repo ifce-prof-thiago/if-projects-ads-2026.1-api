@@ -15,6 +15,7 @@ public class FindProjectSQL {
 
     public FindProjectSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public Optional<IProjectRepository.FindProjectOutput> execute(UUID id, UUID userId) {

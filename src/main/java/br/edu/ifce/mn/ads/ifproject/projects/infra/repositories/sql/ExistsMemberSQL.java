@@ -16,6 +16,7 @@ public class ExistsMemberSQL {
 
     public ExistsMemberSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public boolean execute(UUID projectId, UUID userId) {

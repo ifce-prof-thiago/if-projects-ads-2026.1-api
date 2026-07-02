@@ -18,6 +18,7 @@ public class CreateProjectSQL {
 
     public CreateProjectSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public UUID execute(UUID ownerId, ICreateProject.CreateProjectInput input) {

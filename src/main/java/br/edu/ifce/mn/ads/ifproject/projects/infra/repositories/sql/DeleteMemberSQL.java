@@ -16,6 +16,7 @@ public class DeleteMemberSQL {
 
     public DeleteMemberSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public void execute(UUID projectId, UUID userId) {

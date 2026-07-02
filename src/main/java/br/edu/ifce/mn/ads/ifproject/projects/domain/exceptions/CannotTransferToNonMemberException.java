@@ -6,5 +6,6 @@ public class CannotTransferToNonMemberException extends RuntimeException {
 
     public CannotTransferToNonMemberException(UUID userId) {
         super("Cannot transfer ownership to a non-member: " + userId, null, true, false);
+
     }
 }

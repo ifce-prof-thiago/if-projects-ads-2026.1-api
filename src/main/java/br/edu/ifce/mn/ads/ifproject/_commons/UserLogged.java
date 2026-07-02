@@ -8,6 +8,7 @@ public interface UserLogged {
 
     static boolean isValid() {
         return USER_ID.isBound() && USER_ID.get() != null;
+
     }
 
     static UUID id() {

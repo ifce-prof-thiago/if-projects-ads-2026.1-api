@@ -24,6 +24,7 @@ public class ListProjectsSQL {
 
     public ListProjectsSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public List<IProjectRepository.ListProjectsOutput> execute(UUID userId, Pageable pageable) {

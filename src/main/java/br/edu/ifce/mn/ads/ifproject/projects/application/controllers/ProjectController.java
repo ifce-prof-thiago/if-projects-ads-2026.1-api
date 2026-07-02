@@ -67,13 +67,13 @@ public class ProjectController {
         this.transferOwnership = transferOwnership;
     }
 
-    //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
+    //@RequestHeader("X-User-Id") → Spring Security (futuro)
     @PostMapping
     public ICreateProject.CreateProjectOutput post(@RequestBody ICreateProject.CreateProjectInput body) {
         return createProject.execute(body);
     }
 
-    //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
+    //@RequestHeader("X-User-Id") → Spring Security (futuro)
     @PutMapping("/{id}")
     public IUpdateProject.UpdateProjectOutput update(
             @PathVariable UUID id,
@@ -85,9 +85,10 @@ public class ProjectController {
     @GetMapping
     public List<IProjectRepository.ListProjectsOutput> get(Pageable pageable) {
         return listProjects.execute(pageable);
+
     }
 
-    //@RequestHeader("X-User-Id") (provisório) → Spring Security (futuro)
+    //@RequestHeader("X-User-Id") → Spring Security (futuro)
     @GetMapping("/{id}")
     public IProjectRepository.FindProjectOutput getById(
             @PathVariable UUID id) {
@@ -98,6 +99,7 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public IDeleteProject.DeleteProjectOutput delete(@PathVariable UUID id) {
         return deleteProject.execute(id);
+
     }
 
     @PostMapping("/{id}/members")
@@ -117,11 +119,13 @@ public class ProjectController {
     @PatchMapping("/{id}/archive")
     public IArchiveProject.ArchiveProjectOutput archive(@PathVariable UUID id) {
         return archiveProject.execute(id);
+
     }
 
     @PatchMapping("/{id}/restore")
     public IRestoreProject.RestoreProjectOutput restore(@PathVariable UUID id) {
         return restoreProject.execute(id);
+
     }
 
     @GetMapping("/archived")

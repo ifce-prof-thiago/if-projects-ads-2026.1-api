@@ -16,6 +16,7 @@ public class FindOwnerIdSQL {
 
     public FindOwnerIdSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public UUID execute(UUID projectId) {

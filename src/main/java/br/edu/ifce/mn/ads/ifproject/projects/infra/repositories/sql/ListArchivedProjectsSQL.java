@@ -23,6 +23,7 @@ public class ListArchivedProjectsSQL {
 
     public ListArchivedProjectsSQL(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+
     }
 
     public List<IListArchivedProjects.IListArchivedProjectsOutput> execute(

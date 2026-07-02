@@ -37,16 +37,19 @@ public class    ProjectMemberRepository implements IProjectMemberRepository {
     @Override
     public void persist(UUID projectId, UUID userId, String role) {
         persistMemberSQL.execute(projectId, userId, role);
+
     }
 
     @Override
     public void delete(UUID projectId, UUID userId) {
         deleteMemberSQL.execute(projectId, userId);
+
     }
 
     @Override
     public boolean exists(UUID projectId, UUID userId) {
         return existsMemberSQL.execute(projectId, userId);
+
     }
 
     @Override

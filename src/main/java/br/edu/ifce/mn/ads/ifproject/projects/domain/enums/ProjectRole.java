@@ -8,9 +8,11 @@ public enum ProjectRole {
 
     public boolean canEdit() {
         return this == OWNER || this == ADMIN;
+
     }
 
     public boolean isOwner() {
         return this == OWNER;
+
     }
 }
