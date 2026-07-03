@@ -7,6 +7,8 @@ import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.move.IMoveColumn
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.update.IRenameColumn;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/v1/task_group")
 public class TaskGroupController {
@@ -27,7 +29,7 @@ public class TaskGroupController {
 
     @PatchMapping("{task_group_id}/archive")
     public IArchiveTask.ArchiveTaskOutput patch(
-            @PathVariable("task_group_id") Long id
+            @PathVariable("task_group_id") UUID id
     ){
         return archiveTask.execute(id);
     }
@@ -40,23 +42,24 @@ public class TaskGroupController {
     }
     @PatchMapping("{task_group_id}/rename")
     public IRenameColumn.RenameColumnOutput patch(
-            @PathVariable("task_group_id") Long id,
+            @PathVariable("task_group_id") UUID id,
             @RequestBody IRenameColumn.RenameColumnInput input
     ){
         return renameColumn.execute(id, input);
     }
     @DeleteMapping("{task_group_id}")
     public IDeleteColumn.IDeleteColumnOutput delete(
-            @PathVariable("task_group_id") Long id
+            @PathVariable("task_group_id") UUID id
     ){
         return deleteColumn.execute(id);
     }
 
     @PatchMapping("{task_group_id}/move")
     public IMoveColumn.MoveColumnOutput move(
-            @PathVariable("task_group_id") Long id,
+            @PathVariable("task_group_id") UUID id,
             @RequestBody IMoveColumn.MoveColumnInput input
     ){
         return moveColumn.execute(id, input);
     }
+
 }

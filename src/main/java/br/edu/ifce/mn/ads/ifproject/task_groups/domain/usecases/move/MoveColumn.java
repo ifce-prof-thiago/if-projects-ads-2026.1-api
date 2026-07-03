@@ -4,6 +4,8 @@ import br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories.TaskGroupRepo
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Component
 public class MoveColumn implements IMoveColumn {
 
@@ -15,8 +17,8 @@ public class MoveColumn implements IMoveColumn {
 
     @Override
     @Transactional
-    public MoveColumnOutput execute(Long id, MoveColumnInput input) {
-        final var currentPosition = repository.findPositionById(id);
+    public MoveColumnOutput execute(UUID id, MoveColumnInput input) {
+        final Long currentPosition = repository.findPositionById(id);
 
         if(currentPosition.equals(input.newPosition())){
             return new MoveColumnOutput(id);

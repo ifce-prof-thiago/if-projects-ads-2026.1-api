@@ -6,6 +6,8 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate.IAct
 import br.edu.ifce.mn.ads.ifproject.users.infra.repositories.IUserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class DeleteColumn implements IDeleteColumn {
 
@@ -16,7 +18,7 @@ public class DeleteColumn implements IDeleteColumn {
     }
 
     @Override
-    public IDeleteColumnOutput execute(Long id) {
+    public IDeleteColumnOutput execute(UUID id) {
         final var columnId = repository.delete(id);
         return new IDeleteColumnOutput(columnId);
     }
