@@ -5,6 +5,8 @@ import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.update.IRenameCo
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class TaskGroupRepository implements  ITaskGroupRepository{
 
@@ -15,7 +17,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public Long persist(Long id) {
+    public UUID persist(UUID id) {
         final var SQL = """
                 UPDATE task_groups SET is_archived = true WHERE id = ?
                 """;
@@ -26,7 +28,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public Long persist(ICreateColumn.CreateColumnInput input) {
+    public UUID persist(ICreateColumn.CreateColumnInput input) {
         final var SQL = """
             INSERT INTO task_groups(name, position, board_id) VALUES
             (?, ?, ?)
@@ -36,12 +38,12 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
                 .param(input.name())
                 .param(input.position())
                 .param(input.boardId())
-                .query(Long.class)
+                .query(UUID.class)
                 .single();
     }
 
     @Override
-    public Long persist(Long id, IRenameColumn.RenameColumnInput input) {
+    public UUID persist(UUID id, IRenameColumn.RenameColumnInput input) {
         final var SQL = """
                 UPDATE task_groups SET name = ? WHERE id = ?
                 """;
@@ -53,7 +55,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public Long delete(Long id) {
+    public UUID delete(UUID id) {
         final var SQL = """
                 DELETE FROM task_groups WHERE id = ?
                 """;
@@ -64,7 +66,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public Long findPositionById(Long id) {
+    public Long findPositionById(UUID id) {
         final var SQL = """
                 SELECT position FROM task_groups WHERE id = ?
                 """;
@@ -76,7 +78,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public void updatePosition(Long id, Long newPosition) {
+    public void updatePosition(UUID id, Long newPosition) {
         final var SQL = """
                 UPDATE task_groups SET position = ? WHERE id = ?
                 """;
@@ -88,7 +90,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public void incrementPositions(Long boardId, Long newPosition, Long oldPosition) {
+    public void incrementPositions(UUID boardId, Long newPosition, Long oldPosition) {
         final var SQL = """
                 UPDATE task_groups
                 SET position = position + 1
@@ -104,7 +106,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public void decrementPositions(Long boardId, Long newPosition, Long oldPosition) {
+    public void decrementPositions(UUID boardId, Long newPosition, Long oldPosition) {
         final var SQL = """
                 UPDATE task_groups
                 SET position = position - 1
@@ -118,5 +120,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
                 .param(oldPosition)
                 .update();
     }
+
+
 
 }
