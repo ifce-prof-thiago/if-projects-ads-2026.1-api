@@ -1,9 +1,11 @@
 package br.edu.ifce.mn.ads.ifproject.projects.infra.repositories;
 
+import br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.create_project.ICreateProject;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.sql.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,8 +37,8 @@ public class    ProjectMemberRepository implements IProjectMemberRepository {
     }
 
     @Override
-    public void persist(UUID projectId, UUID userId, String role) {
-        persistMemberSQL.execute(projectId, userId, role);
+    public void persist(UUID projectId, UUID userId, String role, LocalDateTime joinedAt) {
+        persistMemberSQL.execute(projectId, userId, role, joinedAt);
 
     }
 

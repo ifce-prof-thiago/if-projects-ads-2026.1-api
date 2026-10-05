@@ -1,14 +1,18 @@
 package br.edu.ifce.mn.ads.ifproject.users.application.controllers;
 
+import br.edu.ifce.mn.ads.ifproject.users.application.controllers.api.ICreateUserApi;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate.IActivateUser;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create.ICreateUser;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update.IUpdateUser;
 import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.update_password.IUpdateUserPassword;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/users")
-public class UserController {
+@Tag(name = "Usuários", description = "Gerenciamento de Usuários")
+public class UserController implements ICreateUserApi {
 
     private final ICreateUser createUser;
     private final IUpdateUser updateUser;
@@ -27,7 +31,6 @@ public class UserController {
         this.activateUser = activateUser;
     }
 
-    @PostMapping
     public ICreateUser.CreateUserOutput post(@RequestBody ICreateUser.CreateUserInput input) {
         return createUser.execute(input);
     }

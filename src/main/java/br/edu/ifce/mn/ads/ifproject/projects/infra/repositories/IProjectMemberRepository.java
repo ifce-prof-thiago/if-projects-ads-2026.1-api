@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface IProjectMemberRepository {
 
-    void persist(UUID projectId, UUID userId, String role);
+    void persist(UUID projectId, UUID userId, String role, LocalDateTime joinedAt);
 
     void delete(UUID projectId, UUID userId);
 

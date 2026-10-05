@@ -3,6 +3,7 @@ package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.commands.add_membe
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Validated
@@ -11,6 +12,9 @@ public interface IAddMember {
     AddMemberOutput execute(UUID projectId, @Valid AddMemberInput input);
 
     record AddMemberInput(UUID userId, String role) {
+        public LocalDateTime joinedAt() {
+            return LocalDateTime.now();
+        }
     }
 
     record AddMemberOutput(UUID projectId, UUID userId) {

@@ -37,7 +37,7 @@ public class AddMember implements IAddMember {
             throw new MemberAlreadyExistsException(projectId, input.userId());
         }
 
-        memberRepository.persist(projectId, input.userId(), input.role());
+        memberRepository.persist(projectId, input.userId(), input.role(), input.joinedAt());
         return new AddMemberOutput(projectId, input.userId());
     }
 }
