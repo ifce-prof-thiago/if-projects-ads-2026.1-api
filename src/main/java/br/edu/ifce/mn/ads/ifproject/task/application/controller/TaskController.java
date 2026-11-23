@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/api/v1/tasks")
 public class TaskController {
 
     private final ICreateTask createTask;
@@ -58,8 +58,4 @@ public class TaskController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> testEndpoint() {
-        return ResponseEntity.ok("O mapeamento do Controller funcionou!");
-    }
 }

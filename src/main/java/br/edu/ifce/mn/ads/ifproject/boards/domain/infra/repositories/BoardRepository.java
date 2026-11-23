@@ -75,6 +75,14 @@ public class BoardRepository implements IBoardRepository{
     }
 
     @Override
+    public boolean exists(UUID id) {
+        return db.sql("SELECT EXISTS(SELECT 1 FROM boards WHERE id = ?)")
+                .param(id)
+                .query(Boolean.class)
+                .single();
+    }
+
+    @Override
     public boolean isUserAuthorizedToDelete(UUID boardId, UUID userId) {
         final var SQL = """
                 SELECT EXISTS (

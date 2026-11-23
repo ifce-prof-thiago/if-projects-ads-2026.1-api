@@ -1,6 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.boards.application.controllers;
 
-import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.archive.IArchiveBoard;
+import br.edu.ifce.mn.ads.ifproject._commons.UserLogged;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.delete.IDeleteBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.duplicate.IDuplicateBoard;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/boards")
+@RequestMapping("/api/v1/boards")
 public class BoardController {
 
     private final ICreateBoard createBoard;
@@ -66,11 +66,8 @@ public class BoardController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(
-            @PathVariable UUID id,
-            @RequestHeader("X-User-Id") UUID requesterId
-    ) {
-        deleteBoard.execute(id, requesterId);
+    public void delete(@PathVariable UUID id) {
+        deleteBoard.execute(id, UserLogged.id());
     }
 
 //    @PatchMapping("{board_id}/archive")
@@ -84,13 +81,12 @@ public class BoardController {
     @ResponseStatus(HttpStatus.CREATED)
     public IDuplicateBoard.DuplicateBoardOutput duplicate(
             @PathVariable UUID id,
-            @RequestHeader("X-User-Id") UUID requesterId,
             @RequestBody BoardController.DuplicateBoardPayload payload
     ) {
         var input = new IDuplicateBoard.DuplicateBoardInput(
                 id,
                 payload.newBoardName(),
-                requesterId
+                UserLogged.id()
         );
 
         return duplicateBoard.execute(input);

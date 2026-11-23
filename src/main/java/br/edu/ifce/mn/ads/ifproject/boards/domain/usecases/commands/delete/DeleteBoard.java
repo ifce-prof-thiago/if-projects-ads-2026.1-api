@@ -1,5 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.delete;
 
+import br.edu.ifce.mn.ads.ifproject.boards.domain.exceptions.BoardNotFoundException;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.exceptions.BoardUnauthorizedException;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories.IBoardRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +18,14 @@ public class DeleteBoard implements IDeleteBoard{
 
     @Override
     public void execute(UUID boardId, UUID userId) {
+        if (!repository.exists(boardId)) {
+            throw new BoardNotFoundException();
+        }
 
-        boolean isAuthorized = repository.isUserAuthorizedToDelete(boardId, userId);
-
-        if(!isAuthorized){
-            throw new RuntimeException("User is not authorized to delete this board.");
+        if (!repository.isUserAuthorizedToDelete(boardId, userId)) {
+            throw new BoardUnauthorizedException();
         }
 
         repository.delete(boardId);
-
     }
 }

@@ -12,7 +12,7 @@ public interface IUpdateBoard {
     UpdateBoardOutput execute (UUID id, @Valid UpdateBoardInput input);
 
     record UpdateBoardInput(
-            @Size(min = 3, max = 30)
+            @Size(min = 3, max = 30, message = "O nome do quadro deve ter entre 3 e 30 caracteres")
             String name,
             String color
     ){}

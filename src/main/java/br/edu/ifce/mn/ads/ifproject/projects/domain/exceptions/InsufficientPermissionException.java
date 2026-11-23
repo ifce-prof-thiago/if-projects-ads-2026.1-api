@@ -1,9 +1,11 @@
 package br.edu.ifce.mn.ads.ifproject.projects.domain.exceptions;
 
-public class InsufficientPermissionException extends RuntimeException {
+import br.edu.ifce.mn.ads.ifproject._commons.http.ApiException;
+import org.springframework.http.HttpStatus;
+
+public class InsufficientPermissionException extends ApiException {
 
     public InsufficientPermissionException() {
-        super("Insufficient permission to perform this action", null, false, false);
-
+        super(HttpStatus.FORBIDDEN, "Você não tem permissão para realizar esta ação");
     }
 }

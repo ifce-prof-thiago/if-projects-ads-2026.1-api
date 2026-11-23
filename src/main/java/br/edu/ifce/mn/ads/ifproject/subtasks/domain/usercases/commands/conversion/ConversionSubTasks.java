@@ -4,7 +4,7 @@ import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.BusinessRuleExcep
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.ResourceNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories.ISubTasksRepository;
 import org.springframework.stereotype.Component;
-import java.time.OffsetDateTime;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Component
@@ -17,35 +17,34 @@ public class ConversionSubTasks implements IConversionSubTasks {
     }
 
     @Override
+    @Transactional
     public void execute(ConvertToTaskInput input) {
 
-        UUID subtaskId = input.getSubtaskId();
+        UUID subtaskId = input.subtaskId();
 
         SearchIdOutput searchIdOutput = repository.findParentTaskInfo(subtaskId)
-                .orElseThrow(() -> new ResourceNotFoundException("Subtask not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subtarefa não encontrada"));
 
         if(repository.isCompletedSubtask(subtaskId)) {
-            throw new BusinessRuleException("Subtask já está completada");
+            throw new BusinessRuleException("Não é possível converter uma subtarefa já concluída");
         }
-
-        input.setAssignee_id(searchIdOutput.assignee_id());
-        input.setTask_group_id(searchIdOutput.task_group_id());
-        input.setCreator_id(searchIdOutput.creator_id());
-
-        input.setPosition(repository.lastPositionTask() + 1);
-        input.setIs_archived(false);
-        input.setCreated_at(OffsetDateTime.now());
 
         int positionConvertedSubtask = repository.getPositionConvertedSubtask(subtaskId);
 
-        //DISABLE CONVERTED SUBTASK
+        repository.persistNewTask(new ISubTasksRepository.NewTask(
+                searchIdOutput.task_group_id(),
+                searchIdOutput.creator_id(),
+                searchIdOutput.assignee_id(),
+                input.title(),
+                input.description(),
+                input.priority().name(),
+                repository.lastPositionTask(searchIdOutput.task_group_id()) + 1,
+                input.dueDate()
+        ));
+
         repository.removeSubtask(subtaskId);
 
-        //UPDATE SUBTASKS WITH BIGGER POSITIONS THAN CONVERTED SUBTASK
-        repository.updatePositionSubtasksAfterConversion(positionConvertedSubtask);
-
-        //CREAT NEW TASK
-        repository.persistNewTask(input);
+        repository.updatePositionSubtasksAfterConversion(searchIdOutput.task_id(), positionConvertedSubtask);
     }
 
 }

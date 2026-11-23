@@ -1,9 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.delete;
 
 
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.exceptions.ColumnNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories.ITaskGroupRepository;
-import br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate.IActivateUser;
-import br.edu.ifce.mn.ads.ifproject.users.infra.repositories.IUserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -19,6 +18,9 @@ public class DeleteColumn implements IDeleteColumn {
 
     @Override
     public IDeleteColumnOutput execute(UUID id) {
+        if (!repository.exists(id)) {
+            throw new ColumnNotFoundException();
+        }
         final var columnId = repository.delete(id);
         return new IDeleteColumnOutput(columnId);
     }

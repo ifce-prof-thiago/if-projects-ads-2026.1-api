@@ -1,11 +1,13 @@
 package br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate;
 
+import java.util.UUID;
+
 public interface IActivateUser {
 
-    ActivateUserOutput execute(Long id);
+    ActivateUserOutput execute(UUID id);
 
     record ActivateUserOutput(
-            Long id
+            UUID id
     ) {
     }
 }

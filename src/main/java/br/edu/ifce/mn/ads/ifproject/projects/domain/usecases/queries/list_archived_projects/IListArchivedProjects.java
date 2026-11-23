@@ -10,7 +10,7 @@ import java.util.UUID;
 @Validated
 public interface IListArchivedProjects {
 
-    List<IListArchivedProjectsOutput> execute(ListArchivedProjectsInput input, Pageable pageable);
+    List<IListArchivedProjectsOutput> execute(Pageable pageable);
 
     record ListArchivedProjectsInput(UUID userId, Pageable pageable) {
     }

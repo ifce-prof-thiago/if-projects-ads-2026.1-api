@@ -66,6 +66,14 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
+    public boolean exists(UUID id) {
+        return db.sql("SELECT EXISTS(SELECT 1 FROM task_groups WHERE id = ?)")
+                .param(id)
+                .query(Boolean.class)
+                .single();
+    }
+
+    @Override
     public Long findPositionById(UUID id) {
         final var SQL = """
                 SELECT position FROM task_groups WHERE id = ?

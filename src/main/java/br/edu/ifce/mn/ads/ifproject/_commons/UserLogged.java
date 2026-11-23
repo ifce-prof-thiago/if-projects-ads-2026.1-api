@@ -13,7 +13,7 @@ public interface UserLogged {
 
     static UUID id() {
         if (!UserLogged.isValid()) {
-            throw new RuntimeException("Usuário não autenticado");
+            throw new UnauthenticatedException();
         }
         return UUID.fromString(USER_ID.get());
     }

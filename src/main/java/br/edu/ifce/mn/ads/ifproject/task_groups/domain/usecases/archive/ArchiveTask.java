@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.archive;
 
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.exceptions.ColumnNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories.ITaskGroupRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,10 @@ public class ArchiveTask implements IArchiveTask{
 
     @Override
     public ArchiveTaskOutput execute(UUID id) {
-        final var taskId = repository.persist(id);
-        return null;
+        if (!repository.exists(id)) {
+            throw new ColumnNotFoundException();
+        }
+        repository.persist(id);
+        return new ArchiveTaskOutput(id);
     }
 }

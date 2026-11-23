@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Size(min = 3, max = 10)
+@Size(min = 3, max = 10, message = "O nome de usuário deve ter entre 3 e 10 caracteres")
 @Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})

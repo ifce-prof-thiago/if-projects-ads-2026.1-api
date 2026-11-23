@@ -13,7 +13,7 @@ public interface ICreateUser {
 
     record CreateUserInput(
             @Username String username,
-            @Email String email,
+            @Email(message = "Informe um e-mail válido") String email,
             @Password String password
     ) {
     }

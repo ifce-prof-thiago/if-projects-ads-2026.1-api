@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.projects.domain.usecases.queries.list_archived_projects;
 
+import br.edu.ifce.mn.ads.ifproject._commons.UserLogged;
 import br.edu.ifce.mn.ads.ifproject.projects.infra.repositories.IProjectRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,8 @@ public class ListArchivedProjects implements IListArchivedProjects {
     }
 
     @Override
-    public List<IListArchivedProjectsOutput> execute(ListArchivedProjectsInput input, Pageable pageable) {
+    public List<IListArchivedProjectsOutput> execute(Pageable pageable) {
+        var input = new ListArchivedProjectsInput(UserLogged.id(), pageable);
         return projectRepository.findArchivedByUser(input, pageable);
     }
 }

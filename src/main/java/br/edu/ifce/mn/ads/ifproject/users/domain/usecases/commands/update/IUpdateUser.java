@@ -5,19 +5,21 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 @Validated
 public interface IUpdateUser {
 
-    UpdateUserOutput execute(Long id, @Valid UpdateUserInput input);
+    UpdateUserOutput execute(UUID id, @Valid UpdateUserInput input);
 
     record UpdateUserInput(
             @Username String username,
-            @Email String email
+            @Email(message = "Informe um e-mail válido") String email
     ) {
     }
 
     record UpdateUserOutput(
-            Long id
+            UUID id
     ) {
     }
 }

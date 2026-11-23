@@ -1,6 +1,8 @@
 package br.edu.ifce.mn.ads.ifproject.subtasks.domain.usecases.commands.toggle;
 
+import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.ResourceNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories.ISubtaskRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -15,7 +17,11 @@ public class ToggleSubtask implements IToggleSubtask {
 
     @Override
     public ToggleSubtaskOutput execute(UUID id) {
-        final var result = repository.toggle(id);
-        return new ToggleSubtaskOutput(result.id(), result.isCompleted());
+        try {
+            final var result = repository.toggle(id);
+            return new ToggleSubtaskOutput(result.id(), result.isCompleted());
+        } catch (EmptyResultDataAccessException ex) {
+            throw new ResourceNotFoundException("Subtarefa não encontrada");
+        }
     }
 }

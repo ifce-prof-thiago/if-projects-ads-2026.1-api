@@ -1,7 +1,10 @@
 package br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.activate;
 
+import br.edu.ifce.mn.ads.ifproject.users.domain.exceptions.UserNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.users.infra.repositories.IUserRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class ActivateUser implements IActivateUser {
@@ -14,7 +17,10 @@ public class ActivateUser implements IActivateUser {
     }
 
     @Override
-    public ActivateUserOutput execute(Long id) {
+    public ActivateUserOutput execute(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new UserNotFoundException();
+        }
         final var userId = repository.active(id);
         return new ActivateUserOutput(userId);
     }

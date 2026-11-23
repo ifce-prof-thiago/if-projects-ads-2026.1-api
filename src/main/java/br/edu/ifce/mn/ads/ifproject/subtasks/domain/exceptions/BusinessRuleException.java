@@ -1,8 +1,11 @@
 package br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions;
 
-public class BusinessRuleException extends RuntimeException {
+import br.edu.ifce.mn.ads.ifproject._commons.http.ApiException;
+import org.springframework.http.HttpStatus;
+
+public class BusinessRuleException extends ApiException {
 
     public BusinessRuleException(String message) {
-        super(message);
+        super(HttpStatus.UNPROCESSABLE_ENTITY, message);
     }
 }

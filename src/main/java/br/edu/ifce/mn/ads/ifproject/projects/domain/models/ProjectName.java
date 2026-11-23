@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Size(min = 3, max = 100)
+@Size(min = 3, max = 100, message = "O nome do projeto deve ter entre 3 e 100 caracteres")
 @Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})

@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class    ProjectMemberRepository implements IProjectMemberRepository {
+public class ProjectMemberRepository implements IProjectMemberRepository {
 
     private final PersistMemberSQL persistMemberSQL;
     private final DeleteMemberSQL deleteMemberSQL;

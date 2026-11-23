@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.move;
 
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.exceptions.ColumnNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories.TaskGroupRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ public class MoveColumn implements IMoveColumn {
     @Override
     @Transactional
     public MoveColumnOutput execute(UUID id, MoveColumnInput input) {
+        if (!repository.exists(id)) {
+            throw new ColumnNotFoundException();
+        }
         final Long currentPosition = repository.findPositionById(id);
 
         if(currentPosition.equals(input.newPosition())){

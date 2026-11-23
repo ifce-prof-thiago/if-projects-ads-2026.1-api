@@ -18,6 +18,8 @@ public interface IBoardRepository {
 
     List<IFindBoardsByProject.BoardItem> findByProjectId(UUID projectId);
 
+    boolean exists(UUID id);
+
     boolean isUserAuthorizedToDelete(UUID boardId, UUID userId);
     void delete(UUID boardId);
 

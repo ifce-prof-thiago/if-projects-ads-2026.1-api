@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Size(min = 4, max = 8)
+@Size(min = 4, max = 8, message = "A senha deve ter entre 4 e 8 caracteres")
 @Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})

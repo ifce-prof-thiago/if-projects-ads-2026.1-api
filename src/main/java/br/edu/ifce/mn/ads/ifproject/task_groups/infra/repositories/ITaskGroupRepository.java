@@ -10,6 +10,8 @@ public interface ITaskGroupRepository {
     UUID persist(ICreateColumn.CreateColumnInput input);
     UUID persist(UUID id, IRenameColumn.RenameColumnInput input );
     UUID delete(UUID id);
+    boolean exists(UUID id);
+
     Long findPositionById(UUID id);
 
     void updatePosition(UUID id, Long newPosition);

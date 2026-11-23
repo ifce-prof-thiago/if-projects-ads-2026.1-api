@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- 1. Tabela de Usuários
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id            UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     username      VARCHAR(50)  NOT NULL UNIQUE,
@@ -11,7 +11,7 @@ CREATE TABLE users
 );
 
 -- 2. Tabela de Projetos
-CREATE TABLE projects
+CREATE TABLE IF NOT EXISTS projects
 (
     id          UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     name        VARCHAR(100) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE projects
 );
 
 -- 3. Membros do Projeto
-CREATE TABLE project_members
+CREATE TABLE IF NOT EXISTS project_members
 (
     project_id UUID REFERENCES projects (id) ON DELETE CASCADE,
     user_id    UUID REFERENCES users (id) ON DELETE CASCADE,
@@ -31,7 +31,7 @@ CREATE TABLE project_members
 );
 
 -- 4. Tabela de Quadros
-CREATE TABLE boards
+CREATE TABLE IF NOT EXISTS boards
 (
     id          UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     project_id  UUID REFERENCES projects (id) ON DELETE CASCADE,
@@ -42,7 +42,7 @@ CREATE TABLE boards
 );
 
 -- 5. Grupos de Tarefas
-CREATE TABLE task_groups
+CREATE TABLE IF NOT EXISTS task_groups
 (
     id          UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     board_id    UUID REFERENCES boards (id) ON DELETE CASCADE,
@@ -53,7 +53,7 @@ CREATE TABLE task_groups
 );
 
 -- 6. Tarefas
-CREATE TABLE tasks
+CREATE TABLE IF NOT EXISTS tasks
 (
     id            UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     task_group_id UUID REFERENCES task_groups (id) ON DELETE CASCADE,
@@ -69,7 +69,7 @@ CREATE TABLE tasks
 );
 
 -- 7. Subtarefas
-CREATE TABLE subtasks
+CREATE TABLE IF NOT EXISTS subtasks
 (
     id           UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     task_id      UUID REFERENCES tasks (id) ON DELETE CASCADE,

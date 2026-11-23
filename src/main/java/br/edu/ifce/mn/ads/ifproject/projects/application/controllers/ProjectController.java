@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/projects")
+@RequestMapping("/api/v1/projects")
 public class ProjectController {
 
     private final ICreateProject createProject;
@@ -67,13 +67,11 @@ public class ProjectController {
         this.transferOwnership = transferOwnership;
     }
 
-    //@RequestHeader("X-User-Id") → Spring Security (futuro)
     @PostMapping
     public ICreateProject.CreateProjectOutput post(@RequestBody ICreateProject.CreateProjectInput body) {
         return createProject.execute(body);
     }
 
-    //@RequestHeader("X-User-Id") → Spring Security (futuro)
     @PutMapping("/{id}")
     public IUpdateProject.UpdateProjectOutput update(
             @PathVariable UUID id,
@@ -88,7 +86,6 @@ public class ProjectController {
 
     }
 
-    //@RequestHeader("X-User-Id") → Spring Security (futuro)
     @GetMapping("/{id}")
     public IProjectRepository.FindProjectOutput getById(
             @PathVariable UUID id) {
@@ -129,9 +126,8 @@ public class ProjectController {
     }
 
     @GetMapping("/archived")
-    public List<IListArchivedProjects.IListArchivedProjectsOutput> get(@RequestParam UUID userId, Pageable pageable) {
-        var input = new IListArchivedProjects.ListArchivedProjectsInput(userId, pageable);
-        return listArchivedProjects.execute(input, pageable);
+    public List<IListArchivedProjects.IListArchivedProjectsOutput> getArchived(Pageable pageable) {
+        return listArchivedProjects.execute(pageable);
     }
 
     @GetMapping("/{id}/members")

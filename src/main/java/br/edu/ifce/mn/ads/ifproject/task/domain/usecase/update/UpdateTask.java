@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.task.domain.usecase.update;
 
+import br.edu.ifce.mn.ads.ifproject.task.domain.exceptions.TaskNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.task.infra.repositories.ITaskRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class UpdateTask implements IUpdateTask {
     public TaskResponse  execute(UUID id, UpdateTaskRequest request) {
 
         var task = taskRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Task not found"));
+                .orElseThrow(TaskNotFoundException::new);
         task.markAsNotNew();
 
         task.update(request.title(), request.description());

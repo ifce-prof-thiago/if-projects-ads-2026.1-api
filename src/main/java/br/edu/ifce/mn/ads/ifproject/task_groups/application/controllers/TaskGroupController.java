@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/task_group")
+@RequestMapping("/api/v1/task-groups")
 public class TaskGroupController {
 
     private final IArchiveTask archiveTask;
