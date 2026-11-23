@@ -1,6 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.users.domain.usecases.commands.create;
 
 import br.edu.ifce.mn.ads.ifproject.users.domain.exceptions.EmailAlreadyExistsException;
+import br.edu.ifce.mn.ads.ifproject.users.domain.exceptions.UsernameAlreadyExistsException;
 import br.edu.ifce.mn.ads.ifproject.users.infra.repositories.IUserRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,9 @@ public class CreateUser implements ICreateUser {
 
     @Override
     public CreateUserOutput execute(CreateUserInput input) {
+        if (repository.existsByUsername(input.username())) {
+            throw new UsernameAlreadyExistsException();
+        }
         if (repository.existsByEmail(input.email())) {
             throw new EmailAlreadyExistsException();
         }

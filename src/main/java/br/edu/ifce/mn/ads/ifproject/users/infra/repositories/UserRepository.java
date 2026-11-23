@@ -115,4 +115,12 @@ public class UserRepository implements IUserRepository {
                 .query(Boolean.class)
                 .single();
     }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return db.sql("SELECT EXISTS(SELECT 1 FROM users WHERE lower(username) = lower(?))")
+                .param(username)
+                .query(Boolean.class)
+                .single();
+    }
 }

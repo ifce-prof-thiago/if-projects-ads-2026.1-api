@@ -25,6 +25,8 @@ public interface IUserRepository {
 
     boolean existsByEmail(String email);
 
+    boolean existsByUsername(String username);
+
     record AuthenticatedUserWithPassword(
             UUID id,
             String username,
