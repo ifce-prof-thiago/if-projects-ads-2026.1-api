@@ -4,6 +4,7 @@ import br.edu.ifce.mn.ads.ifproject.tasks.domain.model.Task;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.activate.IActivateTask;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.archived.IArchivedTask;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.create.ICreateTask;
+import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.find.IFindTask;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.update.IUpdateTask;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.update.TaskResponse;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.update.UpdateTaskRequest;
@@ -22,12 +23,20 @@ public class    TaskController {
     private final IUpdateTask updateTask;
     private final IActivateTask activateTask;
     private final IArchivedTask archivedTask;
+    private final IFindTask findTask;
 
-    public TaskController(ICreateTask createTask, IUpdateTask updateTask, IActivateTask activateTask,  IArchivedTask archivedTask) {
+    public TaskController(ICreateTask createTask, IUpdateTask updateTask, IActivateTask activateTask, IArchivedTask archivedTask,
+                          IFindTask findTask) {
         this.createTask = createTask;
         this.updateTask = updateTask;
         this.activateTask = activateTask;
         this.archivedTask = archivedTask;
+        this.findTask = findTask;
+    }
+
+    @GetMapping("/{id}")
+    public IFindTask.TaskDetailResponse get(@PathVariable UUID id) {
+        return findTask.execute(id);
     }
 
     @PostMapping

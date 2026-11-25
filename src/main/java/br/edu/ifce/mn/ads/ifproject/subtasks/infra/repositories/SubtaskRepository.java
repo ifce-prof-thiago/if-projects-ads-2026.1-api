@@ -34,7 +34,7 @@ public class SubtaskRepository implements ISubtaskRepository {
 
     public List<SubtarefaDTOoutput> listarPorTarefa(UUID taskId) {
         String sql = "SELECT id, task_id, description, position, is_completed, created_at " +
-                "FROM subtasks WHERE task_id = ?";
+                "FROM subtasks WHERE task_id = ? ORDER BY position ASC, created_at ASC";
 
         return jdbc.query(sql, (rs, rowNum) -> {
             Timestamp dbTimestamp = rs.getTimestamp("created_at");
