@@ -61,10 +61,11 @@ public class SubtaskController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/task-groups/{taskId}")
+    // "/task-groups/{taskId}" é a rota original (recebe o id da TAREFA); "/task/{taskId}" é um alias.
+    @GetMapping({"/task-groups/{taskId}", "/task/{taskId}"})
     public ResponseEntity<List<SubtarefaDTOoutput>> listar(@PathVariable UUID taskId) {
         List<SubtarefaDTOoutput> lista = subtarefaRepository.listarPorTarefa(taskId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(lista);
     }
 
     @DeleteMapping("{id}")
