@@ -20,6 +20,8 @@ public interface IBoardRepository {
 
     List<IFindBoardsByProject.BoardItem> findByProjectId(UUID projectId);
 
+    boolean exists(UUID boardId);
+    // OWNER ou ADMIN do projeto do quadro (pelo role em project_members)
     boolean isUserAuthorizedToDelete(UUID boardId, UUID userId);
     void delete(UUID boardId);
 

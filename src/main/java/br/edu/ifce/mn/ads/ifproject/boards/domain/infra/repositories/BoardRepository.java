@@ -82,16 +82,24 @@ public class BoardRepository implements IBoardRepository{
                 SELECT EXISTS (
                     SELECT 1
                     FROM boards b
-                    JOIN projects p ON b.project_id = p.id
-                    LEFT JOIN project_members pm ON pm.project_id = p.id AND pm.user_id = ?
-                    WHERE b.id = ? AND (p.owner_id = ? OR pm.role = 'ADMIN')
+                    JOIN project_members pm ON pm.project_id = b.project_id
+                    WHERE b.id = ? AND pm.user_id = ? AND pm.role IN ('OWNER', 'ADMIN')
                 )
                 """;
 
         return db.sql(SQL)
-                .param(userId)
                 .param(boardId)
                 .param(userId)
+                .query(Boolean.class)
+                .single();
+    }
+
+    @Override
+    public boolean exists(UUID boardId) {
+        final var SQL = "SELECT EXISTS(SELECT 1 FROM boards WHERE id = ?)";
+
+        return db.sql(SQL)
+                .param(boardId)
                 .query(Boolean.class)
                 .single();
     }
