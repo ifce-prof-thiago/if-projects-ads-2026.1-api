@@ -2,8 +2,9 @@ package br.edu.ifce.mn.ads.ifproject.demo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,21 +15,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SpringSecurity {
 
-    private static final String[] PUBLICS_ROUTES = {
-            "/api/v1/public",
-            "/api/v1/public/**"
-    };
-
+    // A identidade do usuário vem do header X-User-Id (ver UserLoggedFilter),
+    // então o Spring Security não autentica nada: só libera as rotas.
+    // CSRF desligado porque a API é stateless (sem sessão/cookie).
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers(PUBLICS_ROUTES).permitAll()
-                                .requestMatchers("/api/v1/admin").hasRole("ADMIN")
-                                .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
 
