@@ -45,7 +45,9 @@ public class TransferOwnership implements ITransferOwnership {
 
         projectRepository.transferOwnership(projectId, input.newOwnerId());
 
-        memberRepository.updateRole(projectId, input.newOwnerId(), ProjectRole.ADMIN.name());
+        // O novo dono vira OWNER e o antigo passa a ADMIN.
+        memberRepository.updateRole(projectId, input.newOwnerId(), ProjectRole.OWNER.name());
+        memberRepository.updateRole(projectId, currentUserId, ProjectRole.ADMIN.name());
 
         return new TransferOwnershipOutput(projectId, input.newOwnerId());
     }
