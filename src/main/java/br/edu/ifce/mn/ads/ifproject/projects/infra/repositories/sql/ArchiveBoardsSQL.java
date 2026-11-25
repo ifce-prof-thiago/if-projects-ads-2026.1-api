@@ -9,7 +9,8 @@ import java.util.UUID;
 public class ArchiveBoardsSQL {
 
     private final static String SQL = """
-            UPDATE boards SET is_archived = true WHERE project_id = ?
+            UPDATE boards SET is_archived = true, archived_with_project = true
+            WHERE project_id = ? AND is_archived = false
             """;
 
     private final JdbcClient jdbcClient;

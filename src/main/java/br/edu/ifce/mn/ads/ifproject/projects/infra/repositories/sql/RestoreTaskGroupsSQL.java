@@ -9,8 +9,9 @@ import java.util.UUID;
 public class RestoreTaskGroupsSQL {
 
     private final static String SQL = """
-            UPDATE task_groups SET is_archived = false
+            UPDATE task_groups SET is_archived = false, archived_with_project = false
             WHERE board_id IN (SELECT id FROM boards WHERE project_id = ?)
+              AND archived_with_project = true
             """;
 
     private final JdbcClient jdbcClient;

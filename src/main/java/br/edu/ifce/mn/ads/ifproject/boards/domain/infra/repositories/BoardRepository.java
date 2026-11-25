@@ -146,7 +146,7 @@ public class BoardRepository implements IBoardRepository{
     @Override
     public Optional<IArchiveBoard.ArchiveBoardOutput> setArchived(UUID id, boolean archived) {
         final var SQL = """
-                UPDATE boards SET is_archived = ? WHERE id = ?
+                UPDATE boards SET is_archived = ?, archived_with_project = false WHERE id = ?
                 RETURNING id, name, is_archived
                 """;
 

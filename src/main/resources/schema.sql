@@ -78,3 +78,11 @@ CREATE TABLE IF NOT EXISTS subtasks
     position     INTEGER NOT NULL,
     created_at   TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Migrações (idempotentes: rodam a cada inicialização sem efeito se já aplicadas)
+
+-- Marca o que foi arquivado em cascata pelo arquivamento do projeto, para que
+-- restaurar o projeto não desarquive o que já estava arquivado antes.
+ALTER TABLE boards      ADD COLUMN IF NOT EXISTS archived_with_project BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE task_groups ADD COLUMN IF NOT EXISTS archived_with_project BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE tasks       ADD COLUMN IF NOT EXISTS archived_with_project BOOLEAN NOT NULL DEFAULT FALSE;
