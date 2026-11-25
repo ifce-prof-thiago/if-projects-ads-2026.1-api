@@ -4,8 +4,10 @@ import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.archive.IArc
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.delete.IDeleteBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.duplicate.IDuplicateBoard;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.findBoardsByProject.IFindArchivedBoardsByProject;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.findBoardsByProject.IFindBoardsByProject;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read.IReadBoard;
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.restore.IRestoreBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.update.IUpdateBoard;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,9 @@ public class BoardController {
     private final IUpdateBoard updateBoard;
     private final IFindBoardsByProject findByProject;
     private final IDeleteBoard deleteBoard;
-//    private final IArchiveBoard archiveBoard;
+    private final IArchiveBoard archiveBoard;
+    private final IRestoreBoard restoreBoard;
+    private final IFindArchivedBoardsByProject findArchivedByProject;
     private final IDuplicateBoard duplicateBoard;
 
     public BoardController(ICreateBoard createBoard,
@@ -29,7 +33,9 @@ public class BoardController {
                            IUpdateBoard updateBoard,
                            IFindBoardsByProject findByProject,
                            IDeleteBoard deleteBoard,
-//                           IArchiveBoard archiveBoard,
+                           IArchiveBoard archiveBoard,
+                           IRestoreBoard restoreBoard,
+                           IFindArchivedBoardsByProject findArchivedByProject,
                            IDuplicateBoard duplicateBoard
     ) {
         this.createBoard = createBoard;
@@ -37,7 +43,9 @@ public class BoardController {
         this.updateBoard = updateBoard;
         this.findByProject = findByProject;
         this.deleteBoard = deleteBoard;
-//        this.archiveBoard = archiveBoard;
+        this.archiveBoard = archiveBoard;
+        this.restoreBoard = restoreBoard;
+        this.findArchivedByProject = findArchivedByProject;
         this.duplicateBoard = duplicateBoard;
     }
 
@@ -73,12 +81,20 @@ public class BoardController {
         deleteBoard.execute(id, requesterId);
     }
 
-//    @PatchMapping("{board_id}/archive")
-//    public IArchiveBoard.ArchiveBoardOutput patch(
-//            @PathVariable("board_id") UUID id
-//    ) {
-//        return archiveBoard.execute(id);
-//    }
+    @PatchMapping("/{id}/archive")
+    public IArchiveBoard.ArchiveBoardOutput archive(@PathVariable UUID id) {
+        return archiveBoard.execute(id);
+    }
+
+    @PatchMapping("/{id}/restore")
+    public IArchiveBoard.ArchiveBoardOutput restore(@PathVariable UUID id) {
+        return restoreBoard.execute(id);
+    }
+
+    @GetMapping(value = "/project/{projectId}/archived")
+    public IFindBoardsByProject.FindBoardsByProjectOutput getArchivedByProjectId(@PathVariable UUID projectId) {
+        return findArchivedByProject.execute(projectId);
+    }
 
     @PostMapping(value = "/{id}/duplicate")
     @ResponseStatus(HttpStatus.CREATED)

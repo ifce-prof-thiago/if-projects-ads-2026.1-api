@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories;
 
+import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.archive.IArchiveBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.create.ICreateBoard;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.findBoardsByProject.IFindBoardsByProject;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read.IReadBoard;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -133,4 +135,36 @@ public class BoardRepository implements IBoardRepository{
                 .update();
     }
 
+    @Override
+    public Optional<IArchiveBoard.ArchiveBoardOutput> setArchived(UUID id, boolean archived) {
+        final var SQL = """
+                UPDATE boards SET is_archived = ? WHERE id = ?
+                RETURNING id, name, is_archived
+                """;
+
+        return db.sql(SQL)
+                .param(archived)
+                .param(id)
+                .query((rs, rowNum) -> new IArchiveBoard.ArchiveBoardOutput(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("name"),
+                        rs.getBoolean("is_archived")
+                ))
+                .optional();
+    }
+
+    @Override
+    public List<IFindBoardsByProject.BoardItem> findArchivedByProjectId(UUID projectId) {
+        final var SQL = "SELECT id, name, color_hex, is_archived FROM boards WHERE project_id = (?) AND is_archived is true";
+
+        return db.sql(SQL)
+                .param(projectId)
+                .query((rs, rowNum) -> new IFindBoardsByProject.BoardItem(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("name"),
+                        rs.getString("color_hex"),
+                        rs.getBoolean("is_archived")
+                ))
+                .list();
+    }
 }
