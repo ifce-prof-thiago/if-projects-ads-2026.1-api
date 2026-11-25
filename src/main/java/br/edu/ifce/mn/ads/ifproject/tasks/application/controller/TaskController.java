@@ -78,8 +78,4 @@ public class    TaskController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> testEndpoint() {
-        return ResponseEntity.ok("O mapeamento do Controller funcionou!");
-    }
 }

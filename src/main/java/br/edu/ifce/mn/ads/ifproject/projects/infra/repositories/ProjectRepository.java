@@ -49,7 +49,7 @@ public class ProjectRepository implements IProjectRepository {
                              CreateProjectSQL createProjectSQL,
                              ListArchivedProjectsSQL listArchivedProjectsSQL,
                              FindProjectSQL findProjectSQL, DeleteProjectSQL deleteProjectSQL,
-                             FindProjectSQL findProjectSQL1, ListProjectsSQL listProjectsSQL,
+                             ListProjectsSQL listProjectsSQL,
                              ArchiveProjectSQL archiveProjectSQL,
                              RestoreProjectSQL restoreProjectSQL,
                              ArchiveBoardsSQL archiveBoardsSQL,
@@ -65,7 +65,7 @@ public class ProjectRepository implements IProjectRepository {
         this.createProjectSQL = createProjectSQL;
         this.updateProjectSQL = updateProjectSQL;
         this.deleteProjectSQL = deleteProjectSQL;
-        this.findProjectSQL = findProjectSQL1;
+        this.findProjectSQL = findProjectSQL;
         this.listProjectsSQL = listProjectsSQL;
         this.archiveProjectSQL = archiveProjectSQL;
         this.restoreProjectSQL = restoreProjectSQL;
