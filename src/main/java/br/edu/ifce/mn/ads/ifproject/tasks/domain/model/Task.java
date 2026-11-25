@@ -43,6 +43,20 @@ public class Task implements Persistable<UUID> {
         }
     }
 
+    // null = não altera
+    public void update(String title, String description, String priority, UUID assigneeId, LocalDateTime dueDate) {
+        update(title, description);
+        if (priority != null) {
+            this.priority = priority;
+        }
+        if (assigneeId != null) {
+            this.assigneeId = assigneeId;
+        }
+        if (dueDate != null) {
+            this.dueDate = dueDate;
+        }
+    }
+
     public Task(UUID id, UUID taskGroupId, UUID creatorId, UUID assigneeId, String title, String description, String priority, Integer position, LocalDateTime dueDate, LocalDateTime createdAt) {
         this.id = id;
         this.taskGroupId = taskGroupId;

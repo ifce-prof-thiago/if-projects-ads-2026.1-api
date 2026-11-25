@@ -20,7 +20,7 @@ public class UpdateTask implements IUpdateTask {
                 .orElseThrow(()->new RuntimeException("Task not found"));
         task.markAsNotNew();
 
-        task.update(request.title(), request.description());
+        task.update(request.title(), request.description(), request.priority(), request.assigneeId(), request.dueDate());
 
         taskRepository.save(task);
 

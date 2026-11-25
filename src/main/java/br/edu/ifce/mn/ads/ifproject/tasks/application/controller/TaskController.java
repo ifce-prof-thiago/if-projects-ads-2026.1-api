@@ -9,6 +9,7 @@ import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.update.IUpdateTask;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.update.TaskResponse;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.update.UpdateTaskRequest;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +64,7 @@ public class    TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> update(
             @PathVariable UUID id,
-            @RequestBody UpdateTaskRequest request
+            @RequestBody @Valid UpdateTaskRequest request
     ) {
         var response = updateTask.execute(id, request);
         return ResponseEntity.ok(response);
