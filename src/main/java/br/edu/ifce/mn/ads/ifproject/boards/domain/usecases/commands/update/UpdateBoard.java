@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.update;
 
+import br.edu.ifce.mn.ads.ifproject._commons.exceptions.NotFoundException;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories.IBoardRepository;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,9 @@ public class UpdateBoard implements IUpdateBoard{
 
     @Override
     public UpdateBoardOutput execute(UUID id, UpdateBoardInput input) {
+        if (!repository.exists(id)) {
+            throw new NotFoundException("Board not found: " + id);
+        }
         final var boardId = repository.update(id, input);
 
         return new UpdateBoardOutput(boardId);

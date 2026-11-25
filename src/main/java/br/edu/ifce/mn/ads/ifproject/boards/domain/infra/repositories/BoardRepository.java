@@ -33,7 +33,7 @@ public class BoardRepository implements IBoardRepository{
         return id;
     }
 
-    public IReadBoard.ReadBoardOutput find(IReadBoard.ReadBoardInput input){
+    public Optional<IReadBoard.ReadBoardOutput> find(IReadBoard.ReadBoardInput input){
         final var SQL = "SELECT name, project_id, color_hex, is_archived FROM boards WHERE id = (?)";
 
         return db.sql(SQL)
@@ -44,7 +44,7 @@ public class BoardRepository implements IBoardRepository{
                         rs.getString("color_hex"),
                         rs.getBoolean("is_archived")
                 ))
-                .single();
+                .optional();
     }
 
     public UUID update(UUID id, IUpdateBoard.UpdateBoardInput input){

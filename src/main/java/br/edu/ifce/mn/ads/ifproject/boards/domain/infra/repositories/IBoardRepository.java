@@ -14,7 +14,7 @@ public interface IBoardRepository {
 
     UUID persist(ICreateBoard.CreateBoardInput input);
 
-    IReadBoard.ReadBoardOutput find(IReadBoard.ReadBoardInput input);
+    Optional<IReadBoard.ReadBoardOutput> find(IReadBoard.ReadBoardInput input);
 
     UUID update(UUID id, IUpdateBoard.UpdateBoardInput input);
 

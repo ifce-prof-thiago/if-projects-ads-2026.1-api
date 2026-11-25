@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.boards.domain.usecases.commands.read;
 
+import br.edu.ifce.mn.ads.ifproject._commons.exceptions.NotFoundException;
 import br.edu.ifce.mn.ads.ifproject.boards.domain.infra.repositories.IBoardRepository;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,8 @@ public class ReadBoard implements IReadBoard{
     @Override
     public ReadBoardOutput execute(ReadBoardInput input) {
 
-        final var board = repository.find(input);
+        final var board = repository.find(input)
+                .orElseThrow(() -> new NotFoundException("Board not found: " + input.id()));
 
         return board;
     }

@@ -1,4 +1,5 @@
 package br.edu.ifce.mn.ads.ifproject.tasks.domain.usecase.activate;
+import br.edu.ifce.mn.ads.ifproject._commons.exceptions.NotFoundException;
 import br.edu.ifce.mn.ads.ifproject.tasks.domain.model.Task;
 import br.edu.ifce.mn.ads.ifproject.tasks.infra.repositories.ITaskRepository;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class ActivateTask implements IActivateTask {
         Optional<Task> optionalTask = taskRepository.findById(id);
 
         if (optionalTask.isEmpty()) {
-            throw new RuntimeException("Task not found");
+            throw new NotFoundException("Task not found: " + id);
         }
 
         Task task = optionalTask.get();

@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories;
 
+import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.ResourceNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.model.SubtarefaDTOinput;
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.model.SubtarefaDTOoutput;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -84,10 +85,13 @@ public class SubtaskRepository implements ISubtaskRepository {
                 RETURNING id, is_completed
                 """;
 
-        return jdbc.queryForObject(sql, (rs, rowNum) ->
-                new SubtaskToggleResult(
-                        UUID.fromString(rs.getString("id")),
-                        rs.getBoolean("is_completed")
-                ), id);
+        return jdbc.query(sql, (rs, rowNum) ->
+                        new SubtaskToggleResult(
+                                UUID.fromString(rs.getString("id")),
+                                rs.getBoolean("is_completed")
+                        ), id)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Subtask not found: " + id));
     }
 }

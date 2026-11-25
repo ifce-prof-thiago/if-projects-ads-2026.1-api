@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -69,7 +70,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
-    public Long findPositionById(UUID id) {
+    public Optional<Long> findPositionById(UUID id) {
         final var SQL = """
                 SELECT position FROM task_groups WHERE id = ?
                 """;
@@ -77,7 +78,7 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
         return db.sql(SQL)
                 .param(id)
                 .query(Long.class)
-                .single();
+                .optional();
     }
 
     @Override
