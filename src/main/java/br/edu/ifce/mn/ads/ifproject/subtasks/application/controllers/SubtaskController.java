@@ -32,7 +32,7 @@ public class SubtaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> criar(@RequestBody SubtarefaDTOinput input) {
+    public ResponseEntity<Void> criar(@RequestBody @Valid SubtarefaDTOinput input) {
         subtarefaRepository.criar(input);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
