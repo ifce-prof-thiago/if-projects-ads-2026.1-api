@@ -8,16 +8,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IUserRepository {
-    UUID persist(ICreateUser.CreateUserInput input);
+    // passwordHash já vem codificado (BCrypt)
+    UUID persist(ICreateUser.CreateUserInput input, String passwordHash);
 
     // Retorna false se o usuário não existe.
     boolean update(UUID id, IUpdateUser.UpdateUserInput input);
 
     boolean exists(UUID id);
 
-    boolean passwordMatches(UUID id, String password);
+    Optional<String> findPasswordHash(UUID id);
 
-    void updatePassword(UUID id, String newPassword);
+    // Compatibilidade com senhas antigas gravadas em md5 pelo banco.
+    boolean legacyMd5Matches(UUID id, String password);
+
+    void updatePasswordHash(UUID id, String passwordHash);
 
     // Retorna false se o usuário não existe.
     boolean activate(UUID id);

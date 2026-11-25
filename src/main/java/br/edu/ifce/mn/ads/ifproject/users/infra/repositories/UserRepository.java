@@ -30,10 +30,10 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public UUID persist(ICreateUser.CreateUserInput input) {
+    public UUID persist(ICreateUser.CreateUserInput input, String passwordHash) {
         final var SQL = """
                     INSERT INTO users(username, email, password_hash) VALUES
-                    (?, ?, md5(?))
+                    (?, ?, ?)
                     RETURNING id
                 """;
 
@@ -41,7 +41,7 @@ public class UserRepository implements IUserRepository {
             return db.sql(SQL)
                     .param(input.username())
                     .param(input.email())
-                    .param(input.password())
+                    .param(passwordHash)
                     .query(UUID.class)
                     .single();
         } catch (DuplicateKeyException e) {
@@ -78,7 +78,18 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public boolean passwordMatches(UUID id, String password) {
+    public Optional<String> findPasswordHash(UUID id) {
+        final var SQL = """
+                SELECT password_hash FROM users WHERE id = ?
+                """;
+        return db.sql(SQL)
+                .param(id)
+                .query(String.class)
+                .optional();
+    }
+
+    @Override
+    public boolean legacyMd5Matches(UUID id, String password) {
         final var SQL = """
                 SELECT EXISTS(SELECT 1 FROM users WHERE id = ? AND password_hash = md5(?))
                 """;
@@ -90,13 +101,13 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public void updatePassword(UUID id, String newPassword) {
+    public void updatePasswordHash(UUID id, String passwordHash) {
         final var SQL = """
-                UPDATE users SET password_hash = md5(?) WHERE id = ?
+                UPDATE users SET password_hash = ? WHERE id = ?
                 """;
 
         db.sql(SQL)
-                .param(newPassword)
+                .param(passwordHash)
                 .param(id)
                 .update();
     }
