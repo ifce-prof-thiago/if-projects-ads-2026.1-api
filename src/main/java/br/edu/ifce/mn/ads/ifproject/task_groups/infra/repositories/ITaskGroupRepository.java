@@ -1,8 +1,10 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories;
 
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.create.ICreateColumn;
+import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.list.IListColumnsByBoard;
 import br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.update.IRenameColumn;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ITaskGroupRepository {
@@ -17,4 +19,7 @@ public interface ITaskGroupRepository {
     void decrementPositions(UUID boardId, Long newPosition, Long oldPosition);
 
 
+    boolean boardExists(UUID boardId);
+    List<IListColumnsByBoard.ColumnRow> findActiveColumnsByBoard(UUID boardId);
+    List<IListColumnsByBoard.TaskItem> findActiveTasksByBoard(UUID boardId);
 }
