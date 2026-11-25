@@ -1,5 +1,6 @@
 package br.edu.ifce.mn.ads.ifproject.task_groups.domain.usecases.move;
 
+import br.edu.ifce.mn.ads.ifproject._commons.exceptions.BadRequestException;
 import br.edu.ifce.mn.ads.ifproject._commons.exceptions.NotFoundException;
 import br.edu.ifce.mn.ads.ifproject.task_groups.infra.repositories.TaskGroupRepository;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,17 @@ public class MoveColumn implements IMoveColumn {
     @Override
     @Transactional
     public MoveColumnOutput execute(UUID id, MoveColumnInput input) {
+        if (input.newPosition() == null || input.boardId() == null) {
+            throw new BadRequestException("newPosition e boardId são obrigatórios");
+        }
+
         final Long currentPosition = repository.findPositionById(id)
                 .orElseThrow(() -> new NotFoundException("Task group not found: " + id));
+
+        final var columnBoardId = repository.findBoardIdById(id).orElseThrow();
+        if (!columnBoardId.equals(input.boardId())) {
+            throw new BadRequestException("A coluna " + id + " não pertence ao quadro " + input.boardId());
+        }
 
         if(currentPosition.equals(input.newPosition())){
             return new MoveColumnOutput(id);

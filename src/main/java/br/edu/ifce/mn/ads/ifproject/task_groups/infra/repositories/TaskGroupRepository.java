@@ -82,6 +82,18 @@ public class TaskGroupRepository implements  ITaskGroupRepository{
     }
 
     @Override
+    public Optional<UUID> findBoardIdById(UUID id) {
+        final var SQL = """
+                SELECT board_id FROM task_groups WHERE id = ?
+                """;
+
+        return db.sql(SQL)
+                .param(id)
+                .query(UUID.class)
+                .optional();
+    }
+
+    @Override
     public void updatePosition(UUID id, Long newPosition) {
         final var SQL = """
                 UPDATE task_groups SET position = ? WHERE id = ?

@@ -14,6 +14,7 @@ public interface ITaskGroupRepository {
     UUID persist(UUID id, IRenameColumn.RenameColumnInput input );
     UUID delete(UUID id);
     Optional<Long> findPositionById(UUID id);
+    Optional<UUID> findBoardIdById(UUID id);
 
     void updatePosition(UUID id, Long newPosition);
     void incrementPositions(UUID boardId, Long newPosition, Long oldPosition);
