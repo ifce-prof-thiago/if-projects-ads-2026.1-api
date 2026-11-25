@@ -52,7 +52,7 @@ public class    TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateTaskResponse> create(@RequestBody Task request) {
+    public ResponseEntity<CreateTaskResponse> create(@RequestBody @Valid Task request) {
         final var task = createTask.execute(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreateTaskResponse(task.getId()));
     }

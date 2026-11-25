@@ -1,4 +1,7 @@
 package br.edu.ifce.mn.ads.ifproject.tasks.domain.model;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
@@ -14,9 +17,12 @@ public class Task implements Persistable<UUID> {
     private UUID taskGroupId;
     private UUID creatorId;
     private UUID assigneeId;
+    @NotBlank(message = "title é obrigatório")
     private String title;
     private String description;
+    @Pattern(regexp = "LOW|MEDIUM|HIGH", message = "priority deve ser LOW, MEDIUM ou HIGH")
     private String priority; // 'LOW', 'MEDIUM', 'HIGH'
+    @NotNull(message = "position é obrigatório")
     private Integer position;
     private LocalDateTime dueDate;
     private Boolean isArchived;

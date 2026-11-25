@@ -2,6 +2,7 @@ package br.edu.ifce.mn.ads.ifproject.users.domain.models;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.lang.annotation.Retention;
@@ -10,6 +11,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+@NotNull
 @Size(min = 3, max = 10)
 @Target({FIELD})
 @Retention(RUNTIME)
