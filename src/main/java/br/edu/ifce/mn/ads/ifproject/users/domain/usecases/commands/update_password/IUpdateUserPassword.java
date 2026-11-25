@@ -4,10 +4,12 @@ import br.edu.ifce.mn.ads.ifproject.users.domain.models.Password;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 @Validated
 public interface IUpdateUserPassword {
 
-    UpdateUserPasswordOutput execute(Long id, @Valid UpdateUserPasswordInput input);
+    UpdateUserPasswordOutput execute(UUID id, @Valid UpdateUserPasswordInput input);
 
     record UpdateUserPasswordInput(
             @Password String oldPassword,
@@ -16,7 +18,7 @@ public interface IUpdateUserPassword {
     }
 
     record UpdateUserPasswordOutput(
-            Long id
+            UUID id
     ) {
     }
 
