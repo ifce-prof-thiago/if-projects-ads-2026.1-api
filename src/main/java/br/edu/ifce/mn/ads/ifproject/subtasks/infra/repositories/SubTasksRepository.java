@@ -31,7 +31,7 @@ public class SubTasksRepository implements ISubTasksRepository {
     public Optional<SearchIdOutput> findParentTaskInfo(UUID id) {
 
         final var SQL = """
-                SELECT t.task_group_id, t.creator_id, t.assignee_id
+                SELECT t.id AS task_id, t.task_group_id, t.creator_id, t.assignee_id
                 FROM subtasks st JOIN tasks t ON st.task_id = t.id
                 WHERE st.id = ?
                 """;
@@ -39,9 +39,10 @@ public class SubTasksRepository implements ISubTasksRepository {
         return db.sql(SQL).param(id).query(
                 (rs, rowNum) -> {
                 return new SearchIdOutput(
-                    UUID.fromString(rs.getString("assignee_id")),
-                    UUID.fromString(rs.getString("creator_id")),
-                    UUID.fromString(rs.getString("task_group_id")));}
+                    rs.getObject("assignee_id", UUID.class),
+                    rs.getObject("creator_id", UUID.class),
+                    rs.getObject("task_group_id", UUID.class),
+                    rs.getObject("task_id", UUID.class));}
         ).optional();
     }
 
@@ -56,13 +57,13 @@ public class SubTasksRepository implements ISubTasksRepository {
         db.sql(SQL).param(id).update();
     }
 
-    public int lastPositionTask(){
+    public int lastPositionTask(UUID taskGroupId){
 
         final var SQL = """
-                SELECT MAX(position) FROM tasks
+                SELECT COALESCE(MAX(position), -1) FROM tasks WHERE task_group_id = ?
                 """;
 
-        return db.sql(SQL).query(Integer.class).single();
+        return db.sql(SQL).param(taskGroupId).query(Integer.class).single();
     }
 
     @Override
@@ -76,13 +77,13 @@ public class SubTasksRepository implements ISubTasksRepository {
     }
 
     @Override
-    public void updatePositionSubtasksAfterConversion(int position) {
+    public void updatePositionSubtasksAfterConversion(UUID taskId, int position) {
 
         final var SQL = """
-                UPDATE subtasks SET position = position - 1 WHERE position > ?
+                UPDATE subtasks SET position = position - 1 WHERE task_id = ? AND position > ?
                 """;
 
-        db.sql(SQL).param(position).update();
+        db.sql(SQL).param(taskId).param(position).update();
     }
 
     @Override

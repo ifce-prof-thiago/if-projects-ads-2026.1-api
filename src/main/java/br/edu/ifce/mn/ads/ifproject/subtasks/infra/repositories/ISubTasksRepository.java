@@ -16,11 +16,12 @@ public interface ISubTasksRepository {
 
     void removeSubtask(UUID id);
 
-    int lastPositionTask();
+    // Maior posição entre as tarefas da coluna, ou -1 se a coluna estiver vazia.
+    int lastPositionTask(UUID taskGroupId);
 
     boolean isCompletedSubtask(UUID id);
 
-    void updatePositionSubtasksAfterConversion(int position);
+    void updatePositionSubtasksAfterConversion(UUID taskId, int position);
 
     int getPositionConvertedSubtask(UUID id);
 

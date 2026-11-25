@@ -4,6 +4,7 @@ import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.BusinessRuleExcep
 import br.edu.ifce.mn.ads.ifproject.subtasks.domain.exceptions.ResourceNotFoundException;
 import br.edu.ifce.mn.ads.ifproject.subtasks.infra.repositories.ISubTasksRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ public class ConversionSubTasks implements IConversionSubTasks {
     }
 
     @Override
+    @Transactional
     public void execute(ConvertToTaskInput input) {
 
         UUID subtaskId = input.getSubtaskId();
@@ -32,7 +34,7 @@ public class ConversionSubTasks implements IConversionSubTasks {
         input.setTask_group_id(searchIdOutput.task_group_id());
         input.setCreator_id(searchIdOutput.creator_id());
 
-        input.setPosition(repository.lastPositionTask() + 1);
+        input.setPosition(repository.lastPositionTask(searchIdOutput.task_group_id()) + 1);
         input.setIs_archived(false);
         input.setCreated_at(OffsetDateTime.now());
 
@@ -42,7 +44,7 @@ public class ConversionSubTasks implements IConversionSubTasks {
         repository.removeSubtask(subtaskId);
 
         //UPDATE SUBTASKS WITH BIGGER POSITIONS THAN CONVERTED SUBTASK
-        repository.updatePositionSubtasksAfterConversion(positionConvertedSubtask);
+        repository.updatePositionSubtasksAfterConversion(searchIdOutput.task_id(), positionConvertedSubtask);
 
         //CREAT NEW TASK
         repository.persistNewTask(input);
