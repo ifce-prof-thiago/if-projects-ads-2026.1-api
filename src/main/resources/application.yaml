@@ -5,3 +5,7 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
+  sql:
+    init:
+      # O schema.sql e idempotente (CREATE TABLE IF NOT EXISTS) e roda a cada inicializacao.
+      mode: always
