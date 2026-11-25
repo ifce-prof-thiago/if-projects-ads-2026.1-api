@@ -39,10 +39,13 @@ public class    TaskController {
         return findTask.execute(id);
     }
 
+    public record CreateTaskResponse(UUID id) {
+    }
+
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Task request) {
-        createTask.execute(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<CreateTaskResponse> create(@RequestBody Task request) {
+        final var task = createTask.execute(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreateTaskResponse(task.getId()));
     }
 
     @PatchMapping("/{id}/activate")
